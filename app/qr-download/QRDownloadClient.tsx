@@ -10,15 +10,12 @@ export default function QRDownloadClient() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [hasDownloaded, setHasDownloaded] = useState(false);
 
-  // Automatically capture and download when email exists and not yet downloaded
   useEffect(() => {
     if (email && containerRef.current && !hasDownloaded) {
-      // small delay to ensure rendering
       setTimeout(() => {
         html2canvas(containerRef.current!, {
           scale: 2,
           backgroundColor: "#fff",
-          // you can add useCORS: true if needed for images
         }).then((canvas) => {
           canvas.toBlob((blob) => {
             if (blob) {
@@ -38,7 +35,10 @@ export default function QRDownloadClient() {
 
   if (!email) {
     return (
-      <div className="p-8 max-w-md mx-auto text-center text-red-600">
+      <div
+        className="p-8 max-w-md mx-auto text-center"
+        style={{ color: "#B91C1C" /* Tailwind red-700 hex */ }}
+      >
         No email found in URL.
       </div>
     );
@@ -49,24 +49,44 @@ export default function QRDownloadClient() {
   )}`;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-8">
+    <div
+      className="flex flex-col items-center justify-center min-h-screen p-8"
+      style={{ backgroundColor: "#F9FAFB" /* Tailwind gray-50 hex */ }}
+    >
       <div
         ref={containerRef}
-        className="bg-white p-8 rounded shadow-md text-center max-w-sm w-full"
-        style={{ color: "#000" }}
+        className="rounded shadow-md max-w-sm w-full p-8 text-center"
+        style={{
+          color: "#000000",
+          backgroundColor: "#ffffff",
+          boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+        }}
       >
-        <h1 className="text-2xl font-semibold mb-4">🎉 QR Code Ready</h1>
-        <p className="mb-2 text-gray-700">
+        <h1 className="mb-4" style={{ fontWeight: 600, fontSize: "1.5rem" }}>
+          🎉 QR Code Ready
+        </h1>
+        <p
+          style={{
+            marginBottom: "0.5rem",
+            color: "#374151" /* Tailwind gray-700 */,
+          }}
+        >
           Email: <strong>{email}</strong>
         </p>
         <img
           src={qrCodeUrl}
           alt="QR Code"
-          className="mx-auto border border-gray-300 rounded"
+          className="mx-auto rounded border border-gray-300"
           width={200}
           height={200}
         />
-        <p className="mt-4 text-sm text-gray-500">
+        <p
+          style={{
+            marginTop: "1rem",
+            fontSize: "0.875rem",
+            color: "#6B7280" /* gray-500 */,
+          }}
+        >
           Your QR code page will be downloaded automatically.
         </p>
       </div>
