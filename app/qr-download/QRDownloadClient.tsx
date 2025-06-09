@@ -17,7 +17,7 @@ export default function QRDownloadClient() {
         html2canvas(containerRef.current!, {
           scale: 2,
           backgroundColor: "#fff", // white background for the image
-          // you can add other html2canvas options here if needed
+          useCORS: true, // Enable cross-origin support for images
         }).then((canvas) => {
           canvas.toBlob((blob) => {
             if (blob) {
@@ -104,6 +104,7 @@ export default function QRDownloadClient() {
           alt="QR Code"
           width={200}
           height={200}
+          crossOrigin="anonymous" // <-- Important for CORS with html2canvas
           style={{
             borderRadius: "0.25rem",
             border: "1px solid #D1D5DB", // Tailwind gray-300
