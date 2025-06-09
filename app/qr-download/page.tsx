@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import Image from "next/image";
 
 export default function QRDownloadPage() {
   const params = useSearchParams();
@@ -16,7 +17,6 @@ export default function QRDownloadPage() {
     : "";
 
   useEffect(() => {
-    // Enable download trigger after QR is generated
     if (email) setShouldDownload(true);
   }, [email]);
 
@@ -39,17 +39,31 @@ export default function QRDownloadPage() {
         <p className="mb-2 text-gray-700">
           Email: <strong>{email}</strong>
         </p>
+
         {email ? (
-          <img
-            ref={qrRef}
-            src={qrCodeUrl}
-            alt="QR Code"
-            onLoad={handleImageLoad}
-            className="w-48 h-48 mx-auto border border-gray-300 rounded"
-          />
+          <>
+            {/* Optimized display */}
+            <Image
+              src={qrCodeUrl}
+              alt="QR Code"
+              width={200}
+              height={200}
+              unoptimized
+              className="mx-auto border border-gray-300 rounded"
+            />
+            {/* Hidden <img> for downloading */}
+            <img
+              ref={qrRef}
+              src={qrCodeUrl}
+              alt="Download QR"
+              onLoad={handleImageLoad}
+              style={{ display: "none" }}
+            />
+          </>
         ) : (
           <p className="text-red-500">No email found in URL.</p>
         )}
+
         <p className="mt-4 text-sm text-gray-500">
           Your QR code should start downloading automatically.
         </p>
