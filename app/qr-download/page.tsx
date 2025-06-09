@@ -1,10 +1,11 @@
+// app/qr-download/QRDownloadClient.tsx (client component)
 "use client";
 
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 
-export default function QRDownloadPage() {
+export default function QRDownloadClient() {
   const params = useSearchParams();
   const email = params.get("email");
   const qrRef = useRef<HTMLImageElement>(null);
@@ -42,7 +43,6 @@ export default function QRDownloadPage() {
 
         {email ? (
           <>
-            {/* Optimized display */}
             <Image
               src={qrCodeUrl}
               alt="QR Code"
@@ -51,7 +51,6 @@ export default function QRDownloadPage() {
               unoptimized
               className="mx-auto border border-gray-300 rounded"
             />
-            {/* Hidden <img> for downloading */}
             <img
               ref={qrRef}
               src={qrCodeUrl}
