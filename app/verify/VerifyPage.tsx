@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { supabase } from "../../lib/supabaseClient";
 import emailjs from "@emailjs/browser";
@@ -17,49 +17,43 @@ export default function PersonalInfoForm() {
   const [showValidationModal, setShowValidationModal] = useState(false);
 
   const searchParams = useSearchParams();
-  const token = searchParams.get("token");
-
   const [status, setStatus] = useState<"verifying" | "success" | "invalid">(
     "verifying"
   );
 
+  const token = searchParams.get("token");
+  const email = searchParams.get("email");
+
   useEffect(() => {
-    if (!token) {
-      setStatus("invalid");
-      return;
-    }
-
-    const stored = localStorage.getItem(`verify_${token}`);
-    if (!stored) {
-      setStatus("invalid");
-      return;
-    }
-
-    try {
-      const parsed = JSON.parse(stored);
-
-      if (parsed.used) {
+    const verifyToken = async () => {
+      if (!token || !email) {
         setStatus("invalid");
         return;
       }
 
-      // Optionally check expiration (e.g., 15 mins)
-      // if (Date.now() - parsed.createdAt > 15 * 60 * 1000) {
-      //   setStatus("invalid");
-      //   return;
-      // }
+      const { data, error } = await supabase
+        .from("sat_forum_email_verification")
+        .select("*")
+        .eq("email", decodeURIComponent(email))
+        .eq("token", token)
+        .single();
 
-      // Mark token as used
-      localStorage.setItem(
-        `verify_${token}`,
-        JSON.stringify({ ...parsed, used: true })
-      );
+      if (error || !data) {
+        setStatus("invalid");
+      } else {
+        // Optionally mark it verified
+        await supabase
+          .from("sat_forum_email_verification")
+          .update({ verified: true })
+          .eq("email", decodeURIComponent(email))
+          .eq("token", token);
 
-      setStatus("success");
-    } catch {
-      setStatus("invalid");
-    }
-  }, [token]);
+        setStatus("success");
+      }
+    };
+
+    verifyToken();
+  }, [token, email]);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -262,7 +256,9 @@ export default function PersonalInfoForm() {
 
   return (
     <>
-      {status === "verifying" && <p>Verifying token...</p>}
+      {status === "verifying" && (
+        <p className="text-blue-600 text-lg font-medium">Verifying token...</p>
+      )}
       {status === "success" && (
         <main className="flex justify-center items-center w-screen min-h-screen p-2">
           <div className="flex flex-col gap-8 w-[502px] h-[592px] mx-auto bg-white rounded-[24px] shadow-md text-gray-600">
@@ -376,7 +372,7 @@ export default function PersonalInfoForm() {
                             className="w-[50%] border border-gray-300 rounded px-4 py-2"
                           >
                             {countryCodes.map((country) => (
-                              <option key={country.code} value={country.code}>
+                              <option key={country.name} value={country.code}>
                                 {country.flag} ({country.code})
                               </option>
                             ))}
@@ -664,7 +660,10 @@ export default function PersonalInfoForm() {
         </main>
       )}
       {status === "invalid" && (
-        <p className="text-red-600 font-bold">❌ Invalid or expired token.</p>
+        <div className="text-red-600 text-center">
+          <h2 className="text-2xl font-bold mb-2">Invalid or Expired Link</h2>
+          <p>Please check the verification link or try registering again.</p>
+        </div>
       )}
     </>
   );

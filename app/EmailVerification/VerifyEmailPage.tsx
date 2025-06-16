@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import emailjs from "@emailjs/browser";
-import { v4 as uuidv4 } from "uuid";
 import Image from "next/image";
+import { supabase } from "@/lib/supabaseClient"; // Adjust path if needed
 
 export default function VerifyEmailPage() {
   const [email, setEmail] = useState("");
@@ -22,34 +22,73 @@ export default function VerifyEmailPage() {
       return;
     }
 
-    const token = uuidv4();
-    const verificationUrl = `${window.location.origin}/verify?token=${token}`;
-
-    // Store in localStorage with used flag
-    localStorage.setItem(
-      `verify_${token}`,
-      JSON.stringify({
-        email,
-        used: false,
-        // Optional: timestamp for expiry
-        // createdAt: Date.now()
-      })
-    );
-
-    const templateParams = {
-      to_email: email,
-      verification_url: verificationUrl,
-      email,
-    };
+    setLoading(true);
 
     try {
-      setLoading(true);
+      // Check if email already exists
+      const { data: existing } = await supabase
+        .from("sat_forum_email_verification")
+        .select("*")
+        .eq("email", email)
+        .single();
+
+      let token: string;
+
+      if (existing) {
+        // Update attempts +1
+        const { data: updated, error: updateError } = await supabase
+          .from("sat_forum_email_verification")
+          .update({
+            attempts: (existing.attempts ?? 0) + 1,
+          })
+          .eq("email", email)
+          .select("token")
+          .single();
+
+        if (updateError || !updated) {
+          console.error("Update error:", updateError);
+          setError("Something went wrong. Please try again.");
+          return;
+        }
+
+        token = updated.token;
+
+        // Show error message if email already registered
+        setError("This email is already registered.");
+        setLoading(false);
+        return;
+      }
+
+      // Else, insert new record
+      const { data: inserted, error: insertError } = await supabase
+        .from("sat_forum_email_verification")
+        .insert([{ email }])
+        .select("token")
+        .single();
+
+      if (insertError || !inserted) {
+        console.error("Insert error:", insertError);
+        setError("Something went wrong. Please try again.");
+        return;
+      }
+
+      token = inserted.token;
+
+      const verificationUrl = `${
+        window.location.origin
+      }/verify?token=${token}&email=${encodeURIComponent(email)}`;
+
       await emailjs.send(
         "service_1qkyi2i",
         "template_fwozquc",
-        templateParams,
+        {
+          to_email: email,
+          verification_url: verificationUrl,
+          email,
+        },
         "sOTpCYbD5KllwgbCD"
       );
+
       setSent(true);
     } catch (err) {
       console.error("Email send error:", err);
