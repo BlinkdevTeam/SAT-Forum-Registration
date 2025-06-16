@@ -25,23 +25,31 @@ export default function VerifyEmailPage() {
     const token = uuidv4();
     const verificationUrl = `${window.location.origin}/verify?token=${token}`;
 
+    // Store in localStorage with used flag
+    localStorage.setItem(
+      `verify_${token}`,
+      JSON.stringify({
+        email,
+        used: false,
+        // Optional: timestamp for expiry
+        // createdAt: Date.now()
+      })
+    );
+
     const templateParams = {
       to_email: email,
       verification_url: verificationUrl,
-      email: email,
+      email,
     };
 
     try {
       setLoading(true);
-
       await emailjs.send(
         "service_1qkyi2i",
         "template_fwozquc",
         templateParams,
         "sOTpCYbD5KllwgbCD"
       );
-
-      localStorage.setItem(token, email);
       setSent(true);
     } catch (err) {
       console.error("Email send error:", err);
@@ -104,17 +112,16 @@ export default function VerifyEmailPage() {
         ) : (
           <>
             <div>
-              <p className="italic text-14px]">Check your email to verify.</p>
+              <p className="italic text-[14px] mb-4 text-center">
+                Check your email to verify.
+              </p>
+              <Image
+                src="/assets/paper_airplane_send_with_dotted_lines_flat_style.jpg"
+                alt="Email"
+                width={400}
+                height={400}
+              />
             </div>
-            {/* <div className="text-green-600 font-medium">
-              A verification email has been sent to <strong>{email}</strong>.
-            </div> */}
-            <Image
-              src="/assets/paper_airplane_send_with_dotted_lines_flat_style.jpg"
-              alt="Email"
-              width={400}
-              height={400}
-            />
           </>
         )}
 
@@ -142,6 +149,7 @@ export default function VerifyEmailPage() {
           </div>
         </div>
       </div>
+
       {/* Modal */}
       {modalContent && (
         <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
