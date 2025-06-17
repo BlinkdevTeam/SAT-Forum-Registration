@@ -53,7 +53,7 @@ export default function QRDownloadClient() {
 
   const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(
     email
-  )}`;
+  )}&ecc=H`; // High error correction
 
   return (
     <div
@@ -99,19 +99,47 @@ export default function QRDownloadClient() {
         >
           Email: <strong>{email}</strong>
         </p>
-        <img
-          src={qrCodeUrl}
-          alt="QR Code"
-          width={200}
-          height={200}
-          crossOrigin="anonymous" // <-- Important for CORS with html2canvas
+        <div
           style={{
-            borderRadius: "0.25rem",
-            border: "1px solid #D1D5DB", // Tailwind gray-300
+            position: "relative",
+            display: "inline-block",
+            width: "200px",
+            height: "200px",
             margin: "1rem auto",
-            display: "block",
           }}
-        />
+        >
+          <img
+            src={qrCodeUrl}
+            alt="QR Code"
+            width={200}
+            height={200}
+            crossOrigin="anonymous"
+            style={{
+              borderRadius: "0.25rem",
+              border: "1px solid #D1D5DB", // Tailwind gray-300
+              width: "100%",
+              height: "100%",
+              display: "block",
+            }}
+          />
+          <img
+            src="/assets/Asset 22 1.png"
+            alt="Logo"
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              width: "48px",
+              height: "48px",
+              transform: "translate(-50%, -50%)",
+              borderRadius: "0.25rem",
+              backgroundColor: "#ffffff",
+              padding: "0.25rem",
+              boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+            }}
+          />
+        </div>
+
         <p
           style={{
             marginTop: "1rem",

@@ -1,14 +1,15 @@
+@import url('https://fonts.cdnfonts.com/css/mono-sans?styles=400,700');
 @import "tailwindcss";
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #ffffff;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: 'Mono Sans', sans-serif;
   --font-mono: var(--font-geist-mono);
 }
 
@@ -20,7 +21,58 @@
 }
 
 body {
-  background: var(--background);
+  background: url('/assets/BG.jpg') no-repeat center center fixed;
+  background-size: cover;
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Mona Sans', sans-serif;
+  position: relative;
+  max-width: 100vw;
+  overflow-x: hidden;
+  overflow-y: auto;
+  /* allow scroll by default (mobile) */
+}
+
+/* Disable vertical scroll on desktop */
+@media (min-width: 768px) {
+  body {
+    overflow-y: hidden;
+  }
+}
+
+.corner-image {
+  position: absolute;
+  width: 1200px;
+  /* adjust size as needed */
+  height: auto;
+  z-index: 10;
+}
+.top-left {
+  top: -300;
+  left: -300;
+}
+.bottom-right {
+  bottom: -255;
+  right: -300;
+}
+
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 50px;
+  --b: 8px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  padding: 1px;
+  background: conic-gradient(#0000 10%, #ffffff) content-box;
+  -webkit-mask:
+    repeating-conic-gradient(#0000 0deg, #000 1deg 20deg, #0000 21deg 36deg),
+    radial-gradient(farthest-side, #0000 calc(100% - var(--b) - 1px), #000 calc(100% - var(--b)));
+  -webkit-mask-composite: destination-in;
+  mask-composite: intersect;
+  animation: l4 1s infinite steps(10);
+}
+
+@keyframes l4 {
+  to {
+    transform: rotate(1turn)
+  }
 }
