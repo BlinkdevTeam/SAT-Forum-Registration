@@ -12,12 +12,11 @@ export default function QRDownloadClient() {
 
   useEffect(() => {
     if (email && containerRef.current && !hasDownloaded) {
-      // small delay to ensure everything is rendered
       setTimeout(() => {
         html2canvas(containerRef.current!, {
           scale: 2,
-          backgroundColor: "#fff", // white background for the image
-          useCORS: true, // Enable cross-origin support for images
+          backgroundColor: "transparent",
+          useCORS: true,
         }).then((canvas) => {
           canvas.toBlob((blob) => {
             if (blob) {
@@ -39,7 +38,7 @@ export default function QRDownloadClient() {
     return (
       <div
         style={{
-          color: "#B91C1C", // Tailwind red-700 hex
+          color: "#B91C1C",
           padding: "2rem",
           maxWidth: "400px",
           margin: "auto",
@@ -53,25 +52,25 @@ export default function QRDownloadClient() {
 
   const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(
     email
-  )}&ecc=H`; // High error correction
+  )}&ecc=H`;
 
   return (
     <div
       style={{
-        backgroundColor: "#F9FAFB", // Tailwind gray-50 hex
+        backgroundColor: "transparent",
         minHeight: "100vh",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        padding: "2rem",
+        // padding: "2rem",
       }}
     >
       <div
         ref={containerRef}
         style={{
-          backgroundColor: "#fff",
-          boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-          borderRadius: "0.5rem",
+          backgroundColor: "transparent",
+          // boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+          // borderRadius: "0.5rem",
           maxWidth: "360px",
           width: "100%",
           padding: "2rem",
@@ -79,76 +78,72 @@ export default function QRDownloadClient() {
           color: "#000",
           fontFamily:
             "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
+          position: "relative",
         }}
       >
-        <h1
-          style={{
-            fontWeight: 600,
-            fontSize: "1.5rem",
-            marginBottom: "1rem",
-          }}
-        >
-          🎉 QR Code Ready
-        </h1>
-        <p
-          style={{
-            marginBottom: "0.5rem",
-            color: "#374151", // Tailwind gray-700
-            fontSize: "1rem",
-          }}
-        >
-          Email: <strong>{email}</strong>
-        </p>
+        {/* Relative container for ticket + QR */}
         <div
           style={{
             position: "relative",
-            display: "inline-block",
-            width: "200px",
-            height: "200px",
-            margin: "1rem auto",
+            width: "100%",
+            height: "auto",
           }}
         >
+          {/* Ticket background image */}
           <img
-            src={qrCodeUrl}
-            alt="QR Code"
-            width={200}
-            height={200}
+            src="/assets/Ticket 1.png"
+            alt="Ticket"
             crossOrigin="anonymous"
             style={{
-              borderRadius: "0.25rem",
-              border: "1px solid #D1D5DB", // Tailwind gray-300
               width: "100%",
-              height: "100%",
+              height: "auto",
+              // borderRadius: "0.25rem",
+              // border: "1px solid #D1D5DB",
               display: "block",
             }}
           />
-          <img
-            src="/assets/Asset 22 1.png"
-            alt="Logo"
+
+          {/* QR + logo block positioned absolutely over ticket */}
+          <div
             style={{
               position: "absolute",
-              top: "50%",
+              top: "32.5%",
               left: "50%",
-              width: "48px",
-              height: "48px",
               transform: "translate(-50%, -50%)",
-              borderRadius: "0.25rem",
-              backgroundColor: "#ffffff",
-              padding: "0.25rem",
-              boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+              width: "160px",
+              height: "160px",
             }}
-          />
+          >
+            <img
+              src={qrCodeUrl}
+              alt="QR Code"
+              crossOrigin="anonymous"
+              style={{
+                width: "100%",
+                height: "100%",
+                // borderRadius: "0.25rem",
+                // border: "1px solid #D1D5DB",
+                display: "block",
+              }}
+            />
+            <img
+              src="/assets/Asset 22 1.png"
+              alt="Logo"
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: "35px",
+                height: "35px",
+                backgroundColor: "#fff",
+                borderRadius: "0.25rem",
+                padding: "0.25rem",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+              }}
+            />
+          </div>
         </div>
-
-        <p
-          style={{
-            marginTop: "1rem",
-            fontSize: "0.875rem",
-            color: "#6B7280", // Tailwind gray-500
-          }}
-        >
-          Your QR code page will be downloaded automatically.
-        </p>
       </div>
     </div>
   );
