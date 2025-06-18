@@ -291,12 +291,12 @@ export default function VerifyEmailPage() {
                   }}
                 ></div>
               </div>
-              <div className="grid grid-cols-1 gap-8 lg:gap-0 lg:grid-cols-2">
+              <div className="grid grid-cols-1 gap-8 lg:gap-0 lg:grid-cols-[40%_60%]">
                 <div className="flex flex-col gap-4">
                   <p className="text-[16px] leading-[23px]">
                     In partnership with
                   </p>
-                  <div className="flex justify-center items-center lg:justify-start lg:items-start gap-12">
+                  <div className="flex justify-center items-center lg:justify-start lg:items-end gap-6">
                     <Image
                       src="/assets/partners/BCS_LOGO_ALT_WHITE 1.png"
                       alt="Bottom Right"
@@ -317,7 +317,7 @@ export default function VerifyEmailPage() {
                   <p className="text-[16px] leading-[23px]">
                     In collaboration with
                   </p>
-                  <div className="flex flex-wrap justify-center items-center gap-12">
+                  <div className="flex flex-wrap justify-center items-center gap-6">
                     <Image
                       src="/assets/collaborations/BI_LOGO_NEONGREEN 1.png"
                       alt="BI Logo"
@@ -363,12 +363,12 @@ export default function VerifyEmailPage() {
                   }}
                 ></div>
               </div>
-              <div className="grid grid-cols-1 gap-8 lg:gap-0 lg:grid-cols-2">
+              <div className="grid grid-cols-1 gap-8 lg:gap-0 lg:grid-cols-[40%_60%]">
                 <div className="flex flex-col gap-4">
                   <p className="text-[16px] leading-[23px]">
                     In partnership with
                   </p>
-                  <div className="flex justify-center items-center lg:justify-start lg:items-start gap-12">
+                  <div className="flex flex-wrap justify-center items-center lg:justify-start lg:items-end gap-6">
                     <Image
                       src="/assets/partners/BCS_LOGO_ALT_WHITE 1.png"
                       alt="Bottom Right"
@@ -389,7 +389,7 @@ export default function VerifyEmailPage() {
                   <p className="text-[16px] leading-[23px]">
                     In collaboration with
                   </p>
-                  <div className="flex flex-wrap justify-center items-center gap-12">
+                  <div className="flex flex-wrap justify-center items-center gap-6">
                     <Image
                       src="/assets/collaborations/BI_LOGO_NEONGREEN 1.png"
                       alt="BI Logo"
