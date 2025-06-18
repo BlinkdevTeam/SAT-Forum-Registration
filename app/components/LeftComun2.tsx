@@ -55,7 +55,7 @@ export default function LeftColumn2() {
   // End Event date selection
 
   const searchParams = useSearchParams();
-  const [status, setStatus] = useState<"verifying" | "success" | "invalid">(
+  const [, setStatus] = useState<"verifying" | "success" | "invalid">(
     "verifying"
   );
 
