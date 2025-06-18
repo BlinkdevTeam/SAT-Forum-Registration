@@ -21,8 +21,8 @@
 }
 
 body {
-  background: url('/assets/BG2.png') no-repeat center center fixed;
-  background-size: cover;
+  /* background: url('/assets/BG2.png') no-repeat center center fixed;
+  background-size: cover; */
   color: var(--foreground);
   font-family: 'Mona Sans', sans-serif;
   position: relative;
@@ -38,6 +38,16 @@ body {
     min-height: 100vh;
     /* Make sure body takes full height */
     margin: 0;
+}
+
+.background-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -1;
 }
 
 /* Disable vertical scroll on desktop */
