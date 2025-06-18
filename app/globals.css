@@ -21,39 +21,37 @@
 }
 
 body {
-  background: url('/assets/BG.jpg') no-repeat center center fixed;
+  background: url('/assets/BG2.png') no-repeat center center fixed;
   background-size: cover;
   color: var(--foreground);
   font-family: 'Mona Sans', sans-serif;
   position: relative;
   max-width: 100vw;
   overflow-x: hidden;
-  overflow-y: auto;
+  /* overflow-y: auto; */
   /* allow scroll by default (mobile) */
+
+  /* Center content */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    /* Make sure body takes full height */
+    margin: 0;
 }
 
 /* Disable vertical scroll on desktop */
-@media (min-width: 768px) {
+/* @media (min-width: 1200px) {
   body {
     overflow-y: hidden;
   }
-}
+} */
+/* @media (max-width: 1200px) {
+  body {
+    overflow-y: auto;
+  }
+} */
 
-.corner-image {
-  position: absolute;
-  width: 1200px;
-  /* adjust size as needed */
-  height: auto;
-  z-index: 10;
-}
-.top-left {
-  top: -300;
-  left: -300;
-}
-.bottom-right {
-  bottom: -255;
-  right: -300;
-}
 
 /* HTML: <div class="loader"></div> */
 .loader {

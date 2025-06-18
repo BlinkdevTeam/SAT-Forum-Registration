@@ -99,7 +99,7 @@ export default function VerifyEmailPage() {
 
   return (
     <>
-      <Image
+      {/* <Image
         src="/assets/HEX 2_1.png"
         alt="Top Left"
         width={1200}
@@ -107,16 +107,15 @@ export default function VerifyEmailPage() {
         className="hidden lg:flex absolute top-[-300px] left-[-300px] -z-10"
       />
 
-      {/* Bottom Right Image */}
       <Image
         src="/assets/HEX 1_1.png"
         alt="Bottom Right"
         width={1200}
         height={1200}
         className="hidden lg:flex absolute bottom-[-255px] right-[-300px] -z-10"
-      />
-      <main className="grid grid-cols-1 md:grid-cols-2 items-center justify-center w-full min-h-screen py-10 px-6 md:px-20 lg:px-40">
-        <section className="flex flex-col justify-center items-center">
+      /> */}
+      <main className="grid grid-cols-1 lg:grid-cols-2 items-center justify-center w-full h-full py-20">
+        <section className="flex flex-col justify-center items-center px-6 lg:px-20">
           <div className="w-full flex flex-col gap-12">
             <div className="flex flex-col gap-8">
               <Image
@@ -318,7 +317,7 @@ export default function VerifyEmailPage() {
                   <p className="text-[16px] leading-[23px]">
                     In collaboration with
                   </p>
-                  <div className="flex justify-between">
+                  <div className="flex flex-wrap justify-center items-center gap-12">
                     <Image
                       src="/assets/collaborations/BI_LOGO_NEONGREEN 1.png"
                       alt="BI Logo"
@@ -390,7 +389,7 @@ export default function VerifyEmailPage() {
                   <p className="text-[16px] leading-[23px]">
                     In collaboration with
                   </p>
-                  <div className="flex justify-between">
+                  <div className="flex flex-wrap justify-center items-center gap-12">
                     <Image
                       src="/assets/collaborations/BI_LOGO_NEONGREEN 1.png"
                       alt="BI Logo"

@@ -86,6 +86,12 @@ export default function PersonalInfoForm() {
           .eq("email", decodeURIComponent(email))
           .eq("token", token);
 
+        // ✅ Set the email to formData
+        setFormData((prev) => ({
+          ...prev,
+          email: decodeURIComponent(email),
+        }));
+
         setStatus("success");
       }
     };
@@ -352,7 +358,7 @@ export default function PersonalInfoForm() {
 
   return (
     <>
-      <Image
+      {/* <Image
         src="/assets/HEX 2_1.png"
         alt="Top Left"
         width={1200}
@@ -360,14 +366,13 @@ export default function PersonalInfoForm() {
         className="hidden lg:flex absolute top-[-300px] left-[-300px] -z-10"
       />
 
-      {/* Bottom Right Image */}
       <Image
         src="/assets/HEX 1_1.png"
         alt="Bottom Right"
         width={1200}
         height={1200}
         className="hidden lg:flex absolute bottom-[-255px] right-[-300px] -z-10"
-      />
+      /> */}
       {status === "verifying" && (
         <div className="max-w-full min-h-screen flex justify-center items-center">
           {/* <p className="text-blue-600 text-lg font-medium">
@@ -377,8 +382,8 @@ export default function PersonalInfoForm() {
         </div>
       )}
       {status === "success" && (
-        <main className="grid grid-cols-1 md:grid-cols-2 items-center justify-center w-full min-h-screen py-10 px-6 md:px-20 lg:px-40">
-          <section className="flex flex-col justify-center items-center">
+        <main className="grid grid-cols-1 md:grid-cols-2 items-center justify-center w-full min-h-screen py-20">
+          <section className="flex flex-col justify-center items-center px-6 lg:px-20">
             <div className="w-full flex flex-col gap-12">
               <div className="flex flex-col gap-8">
                 <Image
@@ -548,6 +553,7 @@ export default function PersonalInfoForm() {
                                 <input
                                   name="email"
                                   value={formData.email}
+                                  readOnly // ✅ prevents user editing
                                   onChange={handleChange}
                                   placeholder="email@example.com"
                                   className={`text-[14px] border ${
@@ -1060,7 +1066,7 @@ export default function PersonalInfoForm() {
                     <p className="text-[16px] leading-[23px]">
                       In collaboration with
                     </p>
-                    <div className="flex justify-between">
+                    <div className="flex flex-wrap justify-center items-center gap-12">
                       <Image
                         src="/assets/collaborations/BI_LOGO_NEONGREEN 1.png"
                         alt="BI Logo"
@@ -1132,7 +1138,7 @@ export default function PersonalInfoForm() {
                     <p className="text-[16px] leading-[23px]">
                       In collaboration with
                     </p>
-                    <div className="flex justify-between">
+                    <div className="flex flex-wrap justify-center items-center gap-12">
                       <Image
                         src="/assets/collaborations/BI_LOGO_NEONGREEN 1.png"
                         alt="BI Logo"
@@ -1310,6 +1316,7 @@ export default function PersonalInfoForm() {
                             <input
                               name="email"
                               value={formData.email}
+                              readOnly // ✅ prevents user editing
                               onChange={handleChange}
                               placeholder="email@example.com"
                               className={`text-[14px] border ${
