@@ -273,7 +273,7 @@ export default function QRDownloadClient() {
               style={{ width: "100%", height: "100%", display: "block" }}
             />
             <img
-              src="/assets/Asset 22 1.png"
+              src="/assets/Asset 22@3x-8.png"
               alt="Logo"
               style={{
                 position: "absolute",
