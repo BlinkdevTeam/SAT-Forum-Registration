@@ -187,7 +187,7 @@ export default function QRDownloadClient() {
             <div
               style={{
                 position: "absolute",
-                top: "52%",
+                top: "51.5%",
                 left: "50%",
                 transform: "translate(-50%, -50%)",
                 width:
