@@ -5,7 +5,7 @@ import emailjs from "@emailjs/browser";
 import Image from "next/image";
 import { supabase } from "@/lib/supabaseClient"; // Adjust path if needed
 
-export default function LeftColumn() {
+export default function VerifyEmailPage() {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -25,61 +25,96 @@ export default function LeftColumn() {
     setLoading(true);
 
     try {
-      // Check if email already exists
+      // 🔍 1. Check if already in sat_forum_registrations
+      const { data: registered } = await supabase
+        .from("sat_forum_registrations")
+        .select("email")
+        .ilike("email", email)
+        .maybeSingle();
+
+      let token: string;
+
+      if (registered) {
+        // 📬 2. Already registered — get or create token
+        const { data: existing } = await supabase
+          .from("sat_forum_email_verification")
+          .select("*")
+          .ilike("email", email)
+          .maybeSingle();
+
+        if (existing) {
+          // 🔁 Update attempts
+          await supabase
+            .from("sat_forum_email_verification")
+            .update({ attempts: (existing.attempts ?? 0) + 1 })
+            .ilike("email", email);
+
+          token = existing.token;
+        } else {
+          // 🆕 Insert new record with generated token
+          const newToken = crypto.randomUUID();
+          const { error: insertError } = await supabase
+            .from("sat_forum_email_verification")
+            .insert([{ email, token: newToken, attempts: 1 }]);
+
+          if (insertError) throw insertError;
+
+          token = newToken;
+        }
+
+        // ✉️ Send already registered email
+        const verificationUrl = `${
+          window.location.origin
+        }/verify?token=${token}&email=${encodeURIComponent(email)}`;
+        await emailjs.send(
+          "service_1qkyi2i",
+          "template_28r3rcr",
+          {
+            to_email: email,
+            verification_url: verificationUrl,
+            email,
+          },
+          "sOTpCYbD5KllwgbCD"
+        );
+
+        setSent(true);
+        return;
+      }
+
+      // 🔍 3. Not registered — check verification table
       const { data: existing } = await supabase
         .from("sat_forum_email_verification")
         .select("*")
-        .eq("email", email)
-        .single();
-
-      let token: string;
-      let isAlreadyRegistered = false;
+        .ilike("email", email)
+        .maybeSingle();
 
       if (existing) {
-        // Update attempts +1
-        const { data: updated, error: updateError } = await supabase
+        // 🔁 Update attempts
+        await supabase
           .from("sat_forum_email_verification")
-          .update({
-            attempts: (existing.attempts ?? 0) + 1,
-          })
-          .eq("email", email)
-          .select("token")
-          .single();
+          .update({ attempts: (existing.attempts ?? 0) + 1 })
+          .ilike("email", email);
 
-        if (updateError || !updated) {
-          console.error("Update error:", updateError);
-          setError("Something went wrong. Please try again.");
-          return;
-        }
-
-        token = updated.token;
-        isAlreadyRegistered = true;
+        token = existing.token;
       } else {
-        // Else, insert new record
-        const { data: inserted, error: insertError } = await supabase
+        // 🆕 Insert new
+        const newToken = crypto.randomUUID();
+        const { error: insertError } = await supabase
           .from("sat_forum_email_verification")
-          .insert([{ email }])
-          .select("token")
-          .single();
+          .insert([{ email, token: newToken, attempts: 1 }]);
 
-        if (insertError || !inserted) {
-          console.error("Insert error:", insertError);
-          setError("Something went wrong. Please try again.");
-          return;
-        }
+        if (insertError) throw insertError;
 
-        token = inserted.token;
+        token = newToken;
       }
 
-      // Construct verification link
+      // ✉️ Send new user email
       const verificationUrl = `${
         window.location.origin
       }/verify?token=${token}&email=${encodeURIComponent(email)}`;
-
-      // Send different email depending on new or existing user
       await emailjs.send(
         "service_1qkyi2i",
-        isAlreadyRegistered ? "template_28r3rcr" : "template_fwozquc",
+        "template_fwozquc",
         {
           to_email: email,
           verification_url: verificationUrl,

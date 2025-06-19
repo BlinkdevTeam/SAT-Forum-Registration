@@ -151,7 +151,9 @@ export default function LeftColumn2() {
       }));
     } else {
       console.log("Field changed:", name, value); // <-- Add this
-      setFormData((prev) => ({ ...prev, [name]: value }));
+      const cleanValue =
+        name === "cellphone" ? value.replace(/\D/g, "") : value;
+      setFormData((prev) => ({ ...prev, [name]: cleanValue }));
     }
   };
 
@@ -548,7 +550,7 @@ export default function LeftColumn2() {
                                   formErrors.firstName
                                     ? "border-red-500"
                                     : "border-gray-300"
-                                } rounded px-4 py-2 w-full`}
+                                } rounded px-4 py-2 w-full uppercase`}
                                 placeholder="First Name"
                               />
                               <span
@@ -574,7 +576,7 @@ export default function LeftColumn2() {
                                   formErrors.lastName
                                     ? "border-red-500"
                                     : "border-gray-300"
-                                } rounded px-4 py-2 w-full`}
+                                } rounded px-4 py-2 w-full uppercase`}
                                 placeholder="Last Name"
                               />
                               <span
@@ -609,6 +611,7 @@ export default function LeftColumn2() {
                                 ))}
                               </select>
                               <input
+                                type="tel"
                                 name="cellphone"
                                 value={formData.cellphone}
                                 onChange={handleChange}
@@ -616,7 +619,7 @@ export default function LeftColumn2() {
                                   formErrors.cellphone
                                     ? "border-red-500"
                                     : "border-gray-300"
-                                } rounded px-4 py-2`}
+                                } rounded px-4 py-2 uppercase`}
                                 placeholder="Enter number"
                               />
                             </div>
@@ -647,7 +650,7 @@ export default function LeftColumn2() {
                             value={formData.address?.street || ""}
                             onChange={handleChange}
                             placeholder="e.g. 245 JP Rizal St."
-                            className="text-[14px] border border-gray-300 rounded px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="uppercase text-[14px] border border-gray-300 rounded px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                           />
                         </div>
 
@@ -665,7 +668,7 @@ export default function LeftColumn2() {
                               formErrors["address.barangay"]
                                 ? "border-red-500"
                                 : "border-gray-300"
-                            } rounded px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                            } rounded px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 uppercase`}
                           />
                           <span
                             className={`text-[12px] text-red-500 transition-opacity duration-200 ${
@@ -692,7 +695,7 @@ export default function LeftColumn2() {
                               formErrors["address.city"]
                                 ? "border-red-500"
                                 : "border-gray-300"
-                            } rounded px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                            } rounded px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 uppercase`}
                           />
                           <span
                             className={`text-[12px] text-red-500 transition-opacity duration-200 ${
@@ -721,7 +724,7 @@ export default function LeftColumn2() {
                                 formErrors["address.province_state"]
                                   ? "border-red-500"
                                   : "border-gray-300"
-                              } rounded px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                              } rounded px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 uppercase`}
                             />
                             <span
                               className={`text-[12px] text-red-500 transition-opacity duration-200 ${
@@ -768,7 +771,7 @@ export default function LeftColumn2() {
                               formErrors.company_organization
                                 ? "border-red-500"
                                 : "border-gray-300"
-                            } rounded px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                            } rounded px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 uppercase`}
                           />
                           <span
                             className={`text-[12px] text-red-500 transition-opacity duration-200 ${
@@ -795,7 +798,7 @@ export default function LeftColumn2() {
                               formErrors.designation_jobtitle
                                 ? "border-red-500"
                                 : "border-gray-300"
-                            } rounded px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                            } rounded px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 uppercase`}
                           />
                           <span
                             className={`text-[12px] text-red-500 transition-opacity duration-200 ${

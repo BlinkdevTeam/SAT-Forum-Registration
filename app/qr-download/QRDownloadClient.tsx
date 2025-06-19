@@ -30,7 +30,7 @@ export default function QRDownloadClient() {
 
       const { data, error } = await supabase
         .from("sat_forum_registrations")
-        .select("first_name, last_name, selected_events")
+        .select("first_name_upper, last_name_upper, selected_events")
         .ilike("email", decodeURIComponent(email))
         .single();
 
@@ -39,7 +39,7 @@ export default function QRDownloadClient() {
         setIsValidEmail(false);
       } else {
         setIsValidEmail(true);
-        setUserName(`${data.first_name} ${data.last_name}`);
+        setUserName(`${data.first_name_upper} ${data.last_name_upper}`);
 
         const events = data.selected_events || [];
 
@@ -188,7 +188,7 @@ export default function QRDownloadClient() {
                 top: "17.5%",
                 left: "50%",
                 transform: "translate(-50%, -50%)",
-                fontSize: "20px",
+                fontSize: "17px",
                 fontWeight: "600",
                 color: "#fff",
                 width: "100%",
