@@ -15,88 +15,123 @@ export default function VerifyEmailPage() {
     null
   );
 
-  const handleSendEmail = async () => {
-    setError("");
+ const handleSendEmail = async () => {
+   setError("");
 
-    if (!email || !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-      setError("Please enter a valid email address.");
-      return;
-    }
+   if (!email || !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+     setError("Please enter a valid email address.");
+     return;
+   }
 
-    setLoading(true);
+   setLoading(true);
 
-    try {
-      // Check if email already exists
-      const { data: existing } = await supabase
-        .from("sat_forum_email_verification")
-        .select("*")
-        .eq("email", email)
-        .single();
+   try {
+     // 🔍 1. Check if already in sat_forum_registrations
+     const { data: registered } = await supabase
+       .from("sat_forum_registrations")
+       .select("email")
+       .ilike("email", email)
+       .maybeSingle();
 
-      let token: string;
-      let isAlreadyRegistered = false;
+     let token: string;
 
-      if (existing) {
-        // Update attempts +1
-        const { data: updated, error: updateError } = await supabase
-          .from("sat_forum_email_verification")
-          .update({
-            attempts: (existing.attempts ?? 0) + 1,
-          })
-          .eq("email", email)
-          .select("token")
-          .single();
+     if (registered) {
+       // 📬 2. Already registered — get or create token
+       const { data: existing } = await supabase
+         .from("sat_forum_email_verification")
+         .select("*")
+         .ilike("email", email)
+         .maybeSingle();
 
-        if (updateError || !updated) {
-          console.error("Update error:", updateError);
-          setError("Something went wrong. Please try again.");
-          return;
-        }
+       if (existing) {
+         // 🔁 Update attempts
+         await supabase
+           .from("sat_forum_email_verification")
+           .update({ attempts: (existing.attempts ?? 0) + 1 })
+           .ilike("email", email);
 
-        token = updated.token;
-        isAlreadyRegistered = true;
-      } else {
-        // Else, insert new record
-        const { data: inserted, error: insertError } = await supabase
-          .from("sat_forum_email_verification")
-          .insert([{ email }])
-          .select("token")
-          .single();
+         token = existing.token;
+       } else {
+         // 🆕 Insert new record with generated token
+         const newToken = crypto.randomUUID();
+         const { error: insertError } = await supabase
+           .from("sat_forum_email_verification")
+           .insert([{ email, token: newToken, attempts: 1 }]);
 
-        if (insertError || !inserted) {
-          console.error("Insert error:", insertError);
-          setError("Something went wrong. Please try again.");
-          return;
-        }
+         if (insertError) throw insertError;
 
-        token = inserted.token;
-      }
+         token = newToken;
+       }
 
-      // Construct verification link
-      const verificationUrl = `${
-        window.location.origin
-      }/verify?token=${token}&email=${encodeURIComponent(email)}`;
+       // ✉️ Send already registered email
+       const verificationUrl = `${
+         window.location.origin
+       }/verify?token=${token}&email=${encodeURIComponent(email)}`;
+       await emailjs.send(
+         "service_1qkyi2i",
+         "template_28r3rcr",
+         {
+           to_email: email,
+           verification_url: verificationUrl,
+           email,
+         },
+         "sOTpCYbD5KllwgbCD"
+       );
 
-      // Send different email depending on new or existing user
-      await emailjs.send(
-        "service_1qkyi2i",
-        isAlreadyRegistered ? "template_28r3rcr" : "template_fwozquc",
-        {
-          to_email: email,
-          verification_url: verificationUrl,
-          email,
-        },
-        "sOTpCYbD5KllwgbCD"
-      );
+       setSent(true);
+       return;
+     }
 
-      setSent(true);
-    } catch (err) {
-      console.error("Email send error:", err);
-      setError("Failed to send verification email. Please try again later.");
-    } finally {
-      setLoading(false);
-    }
-  };
+     // 🔍 3. Not registered — check verification table
+     const { data: existing } = await supabase
+       .from("sat_forum_email_verification")
+       .select("*")
+       .ilike("email", email)
+       .maybeSingle();
+
+     if (existing) {
+       // 🔁 Update attempts
+       await supabase
+         .from("sat_forum_email_verification")
+         .update({ attempts: (existing.attempts ?? 0) + 1 })
+         .ilike("email", email);
+
+       token = existing.token;
+     } else {
+       // 🆕 Insert new
+       const newToken = crypto.randomUUID();
+       const { error: insertError } = await supabase
+         .from("sat_forum_email_verification")
+         .insert([{ email, token: newToken, attempts: 1 }]);
+
+       if (insertError) throw insertError;
+
+       token = newToken;
+     }
+
+     // ✉️ Send new user email
+     const verificationUrl = `${
+       window.location.origin
+     }/verify?token=${token}&email=${encodeURIComponent(email)}`;
+     await emailjs.send(
+       "service_1qkyi2i",
+       "template_fwozquc",
+       {
+         to_email: email,
+         verification_url: verificationUrl,
+         email,
+       },
+       "sOTpCYbD5KllwgbCD"
+     );
+
+     setSent(true);
+   } catch (err) {
+     console.error("Email send error:", err);
+     setError("Failed to send verification email. Please try again later.");
+   } finally {
+     setLoading(false);
+   }
+ };
 
   return (
     <>

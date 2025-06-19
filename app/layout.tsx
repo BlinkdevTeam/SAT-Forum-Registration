@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import ClientWrapper from "./client-wrapper"; // <-- Safe, it's client-only
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,42 +20,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {/* 🎥 Responsive Background Video for All Devices */}
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          className="fixed top-0 left-0 w-full h-full object-cover pointer-events-none z-[-1]"
-        >
-          <source
-            src="/assets/DESKTOP.mp4"
-            type="video/mp4"
-            media="(min-width: 1024px)"
-          />
-          <source
-            src="/assets/TABLET.mp4"
-            type="video/mp4"
-            media="(min-width: 640px)"
-          />
-          <source
-            src="/assets/MOBILE.mp4"
-            type="video/mp4"
-            media="(max-width: 639px)"
-          />
-          Your browser does not support the video tag.
-        </video>
-
-        {children}
+        <ClientWrapper>{children}</ClientWrapper>
       </body>
     </html>
   );

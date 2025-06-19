@@ -79,12 +79,29 @@ export default function QRDownloadClient() {
   }, [email]);
 
   useEffect(() => {
-    if (isValidEmail && containerRef.current && !hasDownloaded) {
+    const captureImage = async () => {
+      if (!isValidEmail || hasDownloaded || !containerRef.current) return;
+
+      const images = containerRef.current.querySelectorAll("img");
+      await Promise.all(
+        Array.from(images).map(
+          (img) =>
+            new Promise<void>((resolve) => {
+              if (img.complete) {
+                resolve();
+              } else {
+                img.onload = () => resolve();
+                img.onerror = () => resolve(); // Avoid blocking
+              }
+            })
+        )
+      );
+
       setTimeout(() => {
         html2canvas(containerRef.current!, {
           scale: 2,
-          backgroundColor: "transparent",
           useCORS: true,
+          backgroundColor: null,
         }).then((canvas) => {
           canvas.toBlob((blob) => {
             if (blob) {
@@ -96,10 +113,12 @@ export default function QRDownloadClient() {
               document.body.removeChild(link);
               setHasDownloaded(true);
             }
-          }, "image/png");
+          });
         });
-      }, 500);
-    }
+      }, 300); // small delay to ensure rendering
+    };
+
+    captureImage();
   }, [isValidEmail, hasDownloaded, email]);
 
   if (!email) {
@@ -158,7 +177,6 @@ export default function QRDownloadClient() {
           <img
             src="/assets/Ticket.png"
             alt="Ticket"
-            crossOrigin="anonymous"
             style={{ width: "100%", height: "auto", display: "block" }}
           />
 
@@ -269,7 +287,6 @@ export default function QRDownloadClient() {
             <img
               src={qrCodeUrl}
               alt="QR Code"
-              crossOrigin="anonymous"
               style={{ width: "100%", height: "100%", display: "block" }}
             />
             <img
