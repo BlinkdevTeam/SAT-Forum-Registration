@@ -4,6 +4,8 @@ import { useState } from "react";
 import emailjs from "@emailjs/browser";
 import Image from "next/image";
 import { supabase } from "@/lib/supabaseClient"; // Adjust path if needed
+import TermsCondition from "./TermsCondition";
+import PrivacyPolicy from "./PrivacyPolicy";
 
 export default function VerifyEmailPage() {
   const [email, setEmail] = useState("");
@@ -251,35 +253,27 @@ export default function VerifyEmailPage() {
             </div>
             {/* Modal */}
             {modalContent && (
-              <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
-                <div className="bg-white max-w-lg w-full rounded-lg shadow-lg p-6 relative">
-                  <h2 className="text-xl font-semibold mb-4">
-                    {modalContent === "terms"
-                      ? "Terms & Conditions"
-                      : "Privacy Policy"}
-                  </h2>
-                  <div className="text-sm max-h-[300px] overflow-y-auto space-y-2 text-gray-700">
+              <div className="fixed inset-0 z-50 bg-black/40 flex items-end justify-center">
+                <div className="bg-white max-w-[90%] w-full rounded-tr-lg rounded-tl-lg shadow-lg p-6 relative">
+                  {/* <h2 className="text-3xl font-bold mb-4 text-gray-800">
+                             {modalContent === "terms"
+                               ? "Terms & Conditions"
+                               : "Privacy Policy"}
+                           </h2> */}
+                  <div className="text-sm max-h-[400px] overflow-y-auto space-y-2 text-gray-700">
                     {modalContent === "terms" ? (
                       <>
-                        <p>
-                          These Terms & Conditions govern your access to and use
-                          of our services...
-                        </p>
-                        <p>[Add more detailed terms here]</p>
+                        <TermsCondition />
                       </>
                     ) : (
                       <>
-                        <p>
-                          This Privacy Policy describes how we collect, use, and
-                          protect your information...
-                        </p>
-                        <p>[Add more detailed privacy info here]</p>
+                        <PrivacyPolicy />
                       </>
                     )}
                   </div>
                   <button
                     onClick={() => setModalContent(null)}
-                    className="absolute top-3 right-4 text-gray-500 hover:text-black text-lg"
+                    className="absolute top-1 right-3 text-gray-500 hover:text-black text-lg cursor-pointer"
                     aria-label="Close modal"
                   >
                     &times;
