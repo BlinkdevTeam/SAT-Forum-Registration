@@ -5,6 +5,8 @@ import emailjs from "@emailjs/browser";
 import Image from "next/image";
 import { supabase } from "@/lib/supabaseClient"; // Adjust path if needed
 import LeftColumn from "../components/LeftColumn";
+import TermsCondition from "../components/TermsCondition";
+import PrivacyPolicy from "../components/PrivacyPolicy";
 
 export default function VerifyEmailPage() {
   const [email, setEmail] = useState("");
@@ -15,123 +17,123 @@ export default function VerifyEmailPage() {
     null
   );
 
- const handleSendEmail = async () => {
-   setError("");
+  const handleSendEmail = async () => {
+    setError("");
 
-   if (!email || !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-     setError("Please enter a valid email address.");
-     return;
-   }
+    if (!email || !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
 
-   setLoading(true);
+    setLoading(true);
 
-   try {
-     // 🔍 1. Check if already in sat_forum_registrations
-     const { data: registered } = await supabase
-       .from("sat_forum_registrations")
-       .select("email")
-       .ilike("email", email)
-       .maybeSingle();
+    try {
+      // 🔍 1. Check if already in sat_forum_registrations
+      const { data: registered } = await supabase
+        .from("sat_forum_registrations")
+        .select("email")
+        .ilike("email", email)
+        .maybeSingle();
 
-     let token: string;
+      let token: string;
 
-     if (registered) {
-       // 📬 2. Already registered — get or create token
-       const { data: existing } = await supabase
-         .from("sat_forum_email_verification")
-         .select("*")
-         .ilike("email", email)
-         .maybeSingle();
+      if (registered) {
+        // 📬 2. Already registered — get or create token
+        const { data: existing } = await supabase
+          .from("sat_forum_email_verification")
+          .select("*")
+          .ilike("email", email)
+          .maybeSingle();
 
-       if (existing) {
-         // 🔁 Update attempts
-         await supabase
-           .from("sat_forum_email_verification")
-           .update({ attempts: (existing.attempts ?? 0) + 1 })
-           .ilike("email", email);
+        if (existing) {
+          // 🔁 Update attempts
+          await supabase
+            .from("sat_forum_email_verification")
+            .update({ attempts: (existing.attempts ?? 0) + 1 })
+            .ilike("email", email);
 
-         token = existing.token;
-       } else {
-         // 🆕 Insert new record with generated token
-         const newToken = crypto.randomUUID();
-         const { error: insertError } = await supabase
-           .from("sat_forum_email_verification")
-           .insert([{ email, token: newToken, attempts: 1 }]);
+          token = existing.token;
+        } else {
+          // 🆕 Insert new record with generated token
+          const newToken = crypto.randomUUID();
+          const { error: insertError } = await supabase
+            .from("sat_forum_email_verification")
+            .insert([{ email, token: newToken, attempts: 1 }]);
 
-         if (insertError) throw insertError;
+          if (insertError) throw insertError;
 
-         token = newToken;
-       }
+          token = newToken;
+        }
 
-       // ✉️ Send already registered email
-       const verificationUrl = `${
-         window.location.origin
-       }/verify?token=${token}&email=${encodeURIComponent(email)}`;
-       await emailjs.send(
-         "service_1qkyi2i",
-         "template_28r3rcr",
-         {
-           to_email: email,
-           verification_url: verificationUrl,
-           email,
-         },
-         "sOTpCYbD5KllwgbCD"
-       );
+        // ✉️ Send already registered email
+        const verificationUrl = `${
+          window.location.origin
+        }/verify?token=${token}&email=${encodeURIComponent(email)}`;
+        await emailjs.send(
+          "service_1qkyi2i",
+          "template_28r3rcr",
+          {
+            to_email: email,
+            verification_url: verificationUrl,
+            email,
+          },
+          "sOTpCYbD5KllwgbCD"
+        );
 
-       setSent(true);
-       return;
-     }
+        setSent(true);
+        return;
+      }
 
-     // 🔍 3. Not registered — check verification table
-     const { data: existing } = await supabase
-       .from("sat_forum_email_verification")
-       .select("*")
-       .ilike("email", email)
-       .maybeSingle();
+      // 🔍 3. Not registered — check verification table
+      const { data: existing } = await supabase
+        .from("sat_forum_email_verification")
+        .select("*")
+        .ilike("email", email)
+        .maybeSingle();
 
-     if (existing) {
-       // 🔁 Update attempts
-       await supabase
-         .from("sat_forum_email_verification")
-         .update({ attempts: (existing.attempts ?? 0) + 1 })
-         .ilike("email", email);
+      if (existing) {
+        // 🔁 Update attempts
+        await supabase
+          .from("sat_forum_email_verification")
+          .update({ attempts: (existing.attempts ?? 0) + 1 })
+          .ilike("email", email);
 
-       token = existing.token;
-     } else {
-       // 🆕 Insert new
-       const newToken = crypto.randomUUID();
-       const { error: insertError } = await supabase
-         .from("sat_forum_email_verification")
-         .insert([{ email, token: newToken, attempts: 1 }]);
+        token = existing.token;
+      } else {
+        // 🆕 Insert new
+        const newToken = crypto.randomUUID();
+        const { error: insertError } = await supabase
+          .from("sat_forum_email_verification")
+          .insert([{ email, token: newToken, attempts: 1 }]);
 
-       if (insertError) throw insertError;
+        if (insertError) throw insertError;
 
-       token = newToken;
-     }
+        token = newToken;
+      }
 
-     // ✉️ Send new user email
-     const verificationUrl = `${
-       window.location.origin
-     }/verify?token=${token}&email=${encodeURIComponent(email)}`;
-     await emailjs.send(
-       "service_1qkyi2i",
-       "template_fwozquc",
-       {
-         to_email: email,
-         verification_url: verificationUrl,
-         email,
-       },
-       "sOTpCYbD5KllwgbCD"
-     );
+      // ✉️ Send new user email
+      const verificationUrl = `${
+        window.location.origin
+      }/verify?token=${token}&email=${encodeURIComponent(email)}`;
+      await emailjs.send(
+        "service_1qkyi2i",
+        "template_fwozquc",
+        {
+          to_email: email,
+          verification_url: verificationUrl,
+          email,
+        },
+        "sOTpCYbD5KllwgbCD"
+      );
 
-     setSent(true);
-   } catch (err) {
-     console.error("Email send error:", err);
-     setError("Failed to send verification email. Please try again later.");
-   } finally {
-     setLoading(false);
-   }
- };
+      setSent(true);
+    } catch (err) {
+      console.error("Email send error:", err);
+      setError("Failed to send verification email. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -255,35 +257,27 @@ export default function VerifyEmailPage() {
           </div>
           {/* Modal */}
           {modalContent && (
-            <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
-              <div className="bg-white max-w-lg w-full rounded-lg shadow-lg p-6 relative">
-                <h2 className="text-xl font-semibold mb-4">
+            <div className="fixed inset-0 z-50 bg-black/40 flex items-end justify-center">
+              <div className="bg-white max-w-[90%] w-full rounded-tr-lg rounded-tl-lg shadow-lg p-6 relative">
+                {/* <h2 className="text-3xl font-bold mb-4 text-gray-800">
                   {modalContent === "terms"
                     ? "Terms & Conditions"
                     : "Privacy Policy"}
-                </h2>
-                <div className="text-sm max-h-[300px] overflow-y-auto space-y-2 text-gray-700">
+                </h2> */}
+                <div className="text-sm max-h-[400px] overflow-y-auto space-y-2 text-gray-700">
                   {modalContent === "terms" ? (
                     <>
-                      <p>
-                        These Terms & Conditions govern your access to and use
-                        of our services...
-                      </p>
-                      <p>[Add more detailed terms here]</p>
+                      <TermsCondition />
                     </>
                   ) : (
                     <>
-                      <p>
-                        This Privacy Policy describes how we collect, use, and
-                        protect your information...
-                      </p>
-                      <p>[Add more detailed privacy info here]</p>
+                      <PrivacyPolicy />
                     </>
                   )}
                 </div>
                 <button
                   onClick={() => setModalContent(null)}
-                  className="absolute top-3 right-4 text-gray-500 hover:text-black text-lg"
+                  className="absolute top-1 right-3 text-gray-500 hover:text-black text-lg cursor-pointer"
                   aria-label="Close modal"
                 >
                   &times;
