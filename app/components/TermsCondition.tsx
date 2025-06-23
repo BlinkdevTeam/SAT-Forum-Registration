@@ -93,9 +93,9 @@ export default function TermsCondition() {
         7. Disclaimer and Limitation of Liability
       </h2>
       <p className="mb-2">
-        The content and services provided through this website are offered "as
-        is" without any warranties. SATF and its organizers will not be held
-        liable for any loss, damage, or injury resulting from:
+        The content and services provided through this website are offered
+        &quot;as is&quot; without any warranties. SATF and its organizers will
+        not be held liable for any loss, damage, or injury resulting from:
       </p>
       <ul className="list-disc list-inside mb-4 ml-4">
         <li>Use or inability to use the website</li>
@@ -110,7 +110,7 @@ export default function TermsCondition() {
         We implement reasonable security measures to protect your data. However,
         you acknowledge that no digital system is completely secure and agree to
         use this site at your own risk. Your data will be handled in accordance
-        with the Philippines' Data Privacy Act of 2012.
+        with the Philippines&apos; Data Privacy Act of 2012.
       </p>
 
       <h2 className="text-xl font-semibold mt-6 mb-2">
@@ -118,9 +118,9 @@ export default function TermsCondition() {
       </h2>
       <p className="mb-4">
         SATF reserves the right to modify these Terms and Conditions at any
-        time. Any updates will be posted on this page with a revised "last
-        updated" date. Continued use of the site constitutes acceptance of the
-        new terms.
+        time. Any updates will be posted on this page with a revised &quot;last
+        updated&quot; date. Continued use of the site constitutes acceptance of
+        the new terms.
       </p>
 
       <h2 className="text-xl font-semibold mt-6 mb-2">
