@@ -962,7 +962,7 @@ export default function PersonalInfoForm() {
                       </p>
 
                       <a
-                        href="https://blinkcreativestudio.com"
+                        href="https://www.blinkcreativestudio.com/Species-Advancement-Tech-Forum"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="w-full flex justify-center items-center mt-6 text-white px-4 py-4 rounded bg-[linear-gradient(to_right,_#0060DC,_#00E071)] hover:opacity-90 cursor-pointer"

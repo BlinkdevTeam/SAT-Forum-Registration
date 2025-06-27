@@ -273,7 +273,7 @@ export default function VerifyEmailPage() {
                   </div>
                   <button
                     onClick={() => setModalContent(null)}
-                    className="absolute top-1 right-3 text-gray-500 hover:text-black text-lg cursor-pointer"
+                    className="absolute top-1 rio toht-3 text-gray-500 hover:text-black text-lg cursor-pointer"
                     aria-label="Close modal"
                   >
                     &times;
