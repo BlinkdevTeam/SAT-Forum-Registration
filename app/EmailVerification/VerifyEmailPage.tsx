@@ -154,7 +154,7 @@ export default function VerifyEmailPage() {
       /> */}
       <main className="grid grid-cols-1 lg:grid-cols-2 items-center justify-center w-full h-full py-20">
         <LeftColumn />
-        <section className="hidden lg:flex">
+        <section className="hidden lg:flex px-4 lg:px-10">
           <div className="relative flex flex-col gap-8 p-12 w-[502px] min-h-[592px] mx-auto bg-white rounded-[24px] shadow-md text-gray-600">
             <div className="w-fit h-auto">
               <h1 className="text-[30px] font-bold">Register</h1>

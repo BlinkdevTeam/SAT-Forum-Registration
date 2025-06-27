@@ -390,7 +390,7 @@ export default function PersonalInfoForm() {
 
           {/* ------------------------------------------------------------------------------------- */}
 
-          <section className="hidden lg:flex">
+          <section className="hidden lg:flex px-4 lg:px-10">
             <div className="flex flex-col gap-8 w-[502px] h-[592px] mx-auto bg-white rounded-[24px] shadow-md text-gray-600 relative">
               {!sent ? (
                 <>

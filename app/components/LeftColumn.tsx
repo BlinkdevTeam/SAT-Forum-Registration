@@ -135,7 +135,7 @@ export default function VerifyEmailPage() {
   };
   return (
     <>
-      <section className="flex flex-col justify-center items-center px-4 lg:px-20">
+      <section className="flex flex-col justify-center items-center px-4 lg:px-20 max-w-[695px] w-full">
         <div className="w-full flex flex-col gap-12">
           <div className="flex flex-col justify-center items-center text-center lg:justify-start lg:items-start lg:text-start gap-8">
             <Image
