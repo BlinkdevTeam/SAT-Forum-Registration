@@ -143,7 +143,7 @@ export default function VerifyEmailPage() {
               alt="Bottom Right"
               width={507}
               height={69}
-              className="w-[330px] h-[45px] lg:w-[507px] lg:h-[69px]"
+              className="w-full max-w-[507px] h-auto"
             />
             <p className="text-[18px] leading-[23px]">
               SATF is a forward-looking forum on breakthrough tech in animal
@@ -302,39 +302,18 @@ export default function VerifyEmailPage() {
                 }}
               ></div>
             </div>
-            <div className="flex justify-between md:justify-center md:gap-8 lg:grid lg:gap-0 lg:grid-cols-[30%_70%]">
-              <div className="flex flex-col gap-4">
+            <div className="flex flex-col lg:flex-row gap-x-16 justify-center lg:justify-start items-center">
+              <div className="flex flex-col gap-y-8 w-fit">
                 <p className="text-[12px] lg:text-[16px] leading-[23px]">
                   In partnership with
                 </p>
-                <div className="flex justify-center items-center lg:justify-start lg:items-end gap-6">
+                <div className="flex flex-wrap gap-8 justify-center items-center">
                   <Image
-                    src="/assets/partners/BCS_LOGO_ALT_WHITE 1.png"
+                    src="/assets/collaborations/Big_Dutchman_Logo.svg 1.png"
                     alt="Bottom Right"
-                    width={69}
-                    height={35}
-                    className="w-[50px] h-[26px] lg:w-[69] lg:h-[35px]"
-                  />
-                  <Image
-                    src="/assets/partners/DSM_FIRMENICH_WHITE_2 1.png"
-                    alt="Bottom Right"
-                    width={52}
-                    height={30}
-                    className="w-[38px] h-[22px] lg:w-[52px] lg:h-[30px]"
-                  />
-                </div>
-              </div>
-              <div className="flex flex-col gap-4 lg:text-center">
-                <p className="text-[12px] lg:text-[16px] leading-[23px]">
-                  In collaboration with
-                </p>
-                <div className="flex lg:flex-wrap justify-center items-center gap-6">
-                  <Image
-                    src="/assets/collaborations/logo-lohmann-white 1.png"
-                    alt="Bottom Right"
-                    width={43}
-                    height={48}
-                    className="w-[32px] h-[35px] lg:w-[43px] lg:h-[48px]"
+                    width={108}
+                    height={36}
+                    className="w-[80px] h-[26px] lg:w-[108px] lg:h-[36px]"
                   />
                   <Image
                     src="/assets/collaborations/BI_LOGO_NEONGREEN 1.png"
@@ -343,13 +322,33 @@ export default function VerifyEmailPage() {
                     height={24}
                     className="w-[59px] h-[17px] lg:w-[80px] lg:h-[24px]"
                   />
-
                   <Image
-                    src="/assets/collaborations/Big_Dutchman_Logo.svg 1.png"
+                    src="/assets/partners/DSM_FIRMENICH_WHITE_2 1.png"
                     alt="Bottom Right"
-                    width={108}
-                    height={36}
-                    className="w-[80px] h-[26px] lg:w-[108px] lg:h-[36px]"
+                    width={52}
+                    height={30}
+                    className="w-[38px] h-[22px] lg:w-[52px] lg:h-[30px]"
+                  />
+                  <Image
+                    src="/assets/collaborations/logo-lohmann-white 1.png"
+                    alt="Bottom Right"
+                    width={43}
+                    height={48}
+                    className="w-[32px] h-[35px] lg:w-[43px] lg:h-[48px]"
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col gap-y-8 w-fit justify-center items-center">
+                <p className="text-[12px] lg:text-[16px] leading-[23px]">
+                  Powered by
+                </p>
+                <div className="flex gap-x-8 justify-center items-center">
+                  <Image
+                    src="/assets/partners/BCS_LOGO_ALT_WHITE 1.png"
+                    alt="Bottom Right"
+                    width={69}
+                    height={35}
+                    className="w-[50px] h-[26px] lg:w-[69] lg:h-[35px]"
                   />
                 </div>
               </div>
@@ -375,39 +374,18 @@ export default function VerifyEmailPage() {
                 }}
               ></div>
             </div>
-            <div className="flex justify-between md:justify-center md:gap-8 lg:grid lg:gap-0 lg:grid-cols-[30%_70%]">
-              <div className="flex flex-col gap-4">
+            <div className="flex flex-col lg:flex-row gap-x-16 justify-center lg:justify-start items-center">
+              <div className="flex flex-col gap-y-8 w-fit">
                 <p className="text-[12px] lg:text-[16px] leading-[23px]">
                   In partnership with
                 </p>
-                <div className="flex justify-center items-center lg:justify-start lg:items-end gap-6">
+                <div className="flex flex-wrap gap-8 justify-center items-center">
                   <Image
-                    src="/assets/partners/BCS_LOGO_ALT_WHITE 1.png"
+                    src="/assets/collaborations/Big_Dutchman_Logo.svg 1.png"
                     alt="Bottom Right"
-                    width={69}
-                    height={35}
-                    className="w-[50px] h-[26px] lg:w-[69] lg:h-[35px]"
-                  />
-                  <Image
-                    src="/assets/partners/DSM_FIRMENICH_WHITE_2 1.png"
-                    alt="Bottom Right"
-                    width={52}
-                    height={30}
-                    className="w-[38px] h-[22px] lg:w-[52px] lg:h-[30px]"
-                  />
-                </div>
-              </div>
-              <div className="flex flex-col gap-4 lg:text-center">
-                <p className="text-[12px] lg:text-[16px] leading-[23px]">
-                  In collaboration with
-                </p>
-                <div className="flex flex-wrap justify-center items-center gap-6">
-                  <Image
-                    src="/assets/collaborations/cropped-cropped-pic_logo2 2.png"
-                    alt="Bottom Right"
-                    width={30}
-                    height={43}
-                    className="w-[24px] h-[35px] lg:w-[30px] lg:h-[43px]"
+                    width={108}
+                    height={36}
+                    className="w-[80px] h-[26px] lg:w-[108px] lg:h-[36px]"
                   />
                   <Image
                     src="/assets/collaborations/BI_LOGO_NEONGREEN 1.png"
@@ -416,13 +394,33 @@ export default function VerifyEmailPage() {
                     height={24}
                     className="w-[59px] h-[17px] lg:w-[80px] lg:h-[24px]"
                   />
-
                   <Image
-                    src="/assets/collaborations/Big_Dutchman_Logo.svg 1.png"
+                    src="/assets/partners/DSM_FIRMENICH_WHITE_2 1.png"
                     alt="Bottom Right"
-                    width={108}
-                    height={36}
-                    className="w-[80px] h-[26px] lg:w-[108px] lg:h-[36px]"
+                    width={52}
+                    height={30}
+                    className="w-[38px] h-[22px] lg:w-[52px] lg:h-[30px]"
+                  />
+                  <Image
+                    src="/assets/collaborations/cropped-cropped-pic_logo2 2.png"
+                    alt="Bottom Right"
+                    width={30}
+                    height={43}
+                    className="w-[32px] h-[35px] lg:w-[30px] lg:h-[43px]"
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col gap-y-8 w-fit justify-center items-center">
+                <p className="text-[12px] lg:text-[16px] leading-[23px]">
+                  Powered by
+                </p>
+                <div className="flex gap-x-8 justify-center items-center">
+                  <Image
+                    src="/assets/partners/BCS_LOGO_ALT_WHITE 1.png"
+                    alt="Bottom Right"
+                    width={69}
+                    height={35}
+                    className="w-[50px] h-[26px] lg:w-[69] lg:h-[35px]"
                   />
                 </div>
               </div>
