@@ -135,7 +135,7 @@ export default function VerifyEmailPage() {
   };
   return (
     <>
-      <section className="flex flex-col justify-center items-center px-4 lg:px-20 max-w-[695px] w-full">
+      <section className="flex flex-col justify-center items-center px-4 lg:px-8 max-w-[695px] w-full">
         <div className="w-full flex flex-col gap-12">
           <div className="flex flex-col justify-center items-center text-center lg:justify-start lg:items-start lg:text-start gap-8">
             <Image
@@ -302,7 +302,7 @@ export default function VerifyEmailPage() {
                 }}
               ></div>
             </div>
-            <div className="flex flex-col lg:flex-row gap-x-16 justify-center items-center lg:justify-start lg:items-start">
+            <div className="flex flex-col gap-y-8 lg:flex-row gap-x-4 lg:gap-x-16 justify-center items-center lg:justify-start lg:items-start">
               <div className="flex flex-col gap-y-8 w-fit">
                 <p className="text-[12px] lg:text-[16px] leading-[23px]">
                   In partnership with
@@ -374,7 +374,7 @@ export default function VerifyEmailPage() {
                 }}
               ></div>
             </div>
-            <div className="flex flex-col lg:flex-row gap-x-16 justify-center items-center lg:justify-start lg:items-start">
+            <div className="flex flex-col gap-y-8 lg:flex-row gap-x-4 lg:gap-x-16 justify-center items-center lg:justify-start lg:items-start">
               <div className="flex flex-col gap-y-8 w-fit">
                 <p className="text-[12px] lg:text-[16px] leading-[23px]">
                   In partnership with
