@@ -302,7 +302,7 @@ export default function VerifyEmailPage() {
                 }}
               ></div>
             </div>
-            <div className="flex flex-col lg:flex-row gap-x-16 justify-center lg:justify-start items-center">
+            <div className="flex flex-col lg:flex-row gap-x-16 justify-center items-center lg:justify-start lg:items-start">
               <div className="flex flex-col gap-y-8 w-fit">
                 <p className="text-[12px] lg:text-[16px] leading-[23px]">
                   In partnership with
@@ -374,7 +374,7 @@ export default function VerifyEmailPage() {
                 }}
               ></div>
             </div>
-            <div className="flex flex-col lg:flex-row gap-x-16 justify-center lg:justify-start items-center">
+            <div className="flex flex-col lg:flex-row gap-x-16 justify-center items-center lg:justify-start lg:items-start">
               <div className="flex flex-col gap-y-8 w-fit">
                 <p className="text-[12px] lg:text-[16px] leading-[23px]">
                   In partnership with
