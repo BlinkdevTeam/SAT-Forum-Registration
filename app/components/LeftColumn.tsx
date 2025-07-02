@@ -310,31 +310,31 @@ export default function VerifyEmailPage() {
                 <div className="flex flex-wrap gap-8 justify-center items-center">
                   <Image
                     src="/assets/collaborations/Big_Dutchman_Logo.svg 1.png"
-                    alt="Bottom Right"
+                    alt="Big Dutchman"
                     width={108}
                     height={36}
-                    className="w-[80px] h-[26px] lg:w-[108px] lg:h-[36px]"
+                    className="w-[100px] h-auto lg:w-[108px] lg:h-auto"
                   />
                   <Image
                     src="/assets/collaborations/BI_LOGO_NEONGREEN 1.png"
                     alt="BI Logo"
                     width={80}
                     height={24}
-                    className="w-[59px] h-[17px] lg:w-[80px] lg:h-[24px]"
+                    className="w-[74px] h-auto lg:w-[80px] lg:h-auto"
                   />
                   <Image
                     src="/assets/partners/DSM_FIRMENICH_WHITE_2 1.png"
-                    alt="Bottom Right"
+                    alt="DSM Logo"
                     width={52}
                     height={30}
-                    className="w-[38px] h-[22px] lg:w-[52px] lg:h-[30px]"
+                    className="w-[48px] h-auto lg:w-[52px] lg:h-auto"
                   />
                   <Image
                     src="/assets/collaborations/logo-lohmann-white 1.png"
-                    alt="Bottom Right"
+                    alt="Lohmann Logo"
                     width={43}
                     height={48}
-                    className="w-[32px] h-[35px] lg:w-[43px] lg:h-[48px]"
+                    className="w-[40px] h-auto lg:w-[43px] lg:h-auto"
                   />
                 </div>
               </div>
@@ -382,31 +382,31 @@ export default function VerifyEmailPage() {
                 <div className="flex flex-wrap gap-8 justify-center items-center">
                   <Image
                     src="/assets/collaborations/Big_Dutchman_Logo.svg 1.png"
-                    alt="Bottom Right"
+                    alt="Big Dutchman"
                     width={108}
                     height={36}
-                    className="w-[80px] h-[26px] lg:w-[108px] lg:h-[36px]"
+                    className="w-[100px] h-auto lg:w-[108px] lg:h-auto"
                   />
                   <Image
                     src="/assets/collaborations/BI_LOGO_NEONGREEN 1.png"
                     alt="BI Logo"
                     width={80}
                     height={24}
-                    className="w-[59px] h-[17px] lg:w-[80px] lg:h-[24px]"
+                    className="w-[74px] h-auto lg:w-[80px] lg:h-auto"
                   />
                   <Image
                     src="/assets/partners/DSM_FIRMENICH_WHITE_2 1.png"
-                    alt="Bottom Right"
+                    alt="DSM Logo"
                     width={52}
                     height={30}
-                    className="w-[38px] h-[22px] lg:w-[52px] lg:h-[30px]"
+                    className="w-[48px] h-auto lg:w-[52px] lg:h-auto"
                   />
                   <Image
-                    src="/assets/collaborations/cropped-cropped-pic_logo2 2.png"
-                    alt="Bottom Right"
-                    width={30}
-                    height={43}
-                    className="w-[32px] h-[35px] lg:w-[30px] lg:h-[43px]"
+                    src="/assets/collaborations/logo-lohmann-white 1.png"
+                    alt="Lohmann Logo"
+                    width={43}
+                    height={48}
+                    className="w-[40px] h-auto lg:w-[43px] lg:h-auto"
                   />
                 </div>
               </div>
