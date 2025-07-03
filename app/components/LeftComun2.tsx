@@ -1047,7 +1047,7 @@ export default function LeftColumn2() {
                     alt="Bottom Right"
                     width={69}
                     height={35}
-                    className="w-[50px] h-[26px] lg:w-[69] lg:h-[35px]"
+                    className="w-[60px] h-auto lg:w-[69] lg:h-[35px]"
                   />
                 </div>
               </div>
@@ -1073,7 +1073,7 @@ export default function LeftColumn2() {
                 }}
               ></div>
             </div>
-            <div className="flex flex-col lg:flex-row gap-x-4 lg:gap-x-16 justify-center lg:justify-start items-center">
+            <div className="flex flex-col gap-y-8 lg:flex-row gap-x-4 lg:gap-x-16 justify-center items-center lg:justify-start lg:items-start">
               <div className="flex flex-col gap-y-8 w-fit">
                 <p className="text-[12px] lg:text-[16px] leading-[23px]">
                   In partnership with
@@ -1101,11 +1101,11 @@ export default function LeftColumn2() {
                     className="w-[48px] h-auto lg:w-[52px] lg:h-auto"
                   />
                   <Image
-                    src="/assets/collaborations/logo-lohmann-white 1.png"
+                    src="/assets/collaborations/cropped-cropped-pic_logo2 2.png"
                     alt="Lohmann Logo"
-                    width={43}
-                    height={48}
-                    className="w-[40px] h-auto lg:w-[43px] lg:h-auto"
+                    width={30}
+                    height={35}
+                    className="w-[27px] h-auto lg:w-[30px] lg:h-auto"
                   />
                 </div>
               </div>
@@ -1119,7 +1119,7 @@ export default function LeftColumn2() {
                     alt="Bottom Right"
                     width={69}
                     height={35}
-                    className="w-[50px] h-[26px] lg:w-[69] lg:h-[35px]"
+                    className="w-[60px] h-auto lg:w-[69] lg:h-[35px]"
                   />
                 </div>
               </div>
