@@ -1029,11 +1029,11 @@ export default function LeftColumn2() {
                     className="w-[48px] h-auto lg:w-[52px] lg:h-auto"
                   />
                   <Image
-                    src="/assets/collaborations/logo-lohmann-white 1.png"
+                    src="/assets/collaborations/LOHMANN_Orange&White.png"
                     alt="Lohmann Logo"
-                    width={43}
-                    height={48}
-                    className="w-[40px] h-auto lg:w-[43px] lg:h-auto"
+                    width={152}
+                    height={53}
+                    className="w-[75px] h-auto lg:w-[82px] lg:h-auto"
                   />
                 </div>
               </div>
