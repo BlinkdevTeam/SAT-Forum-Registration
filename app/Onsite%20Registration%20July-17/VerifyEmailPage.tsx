@@ -4,7 +4,7 @@ import { useState } from "react";
 import emailjs from "@emailjs/browser";
 import Image from "next/image";
 import { supabase } from "@/lib/supabaseClient"; // Adjust path if needed
-import LeftColumn from "../components/LeftColumn";
+import LeftColumn from "../components/LeftColumnOnsite17";
 import TermsCondition from "../components/TermsCondition";
 import PrivacyPolicy from "../components/PrivacyPolicy";
 

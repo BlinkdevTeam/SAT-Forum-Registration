@@ -4,7 +4,7 @@ import { useState } from "react";
 import emailjs from "@emailjs/browser";
 import Image from "next/image";
 import { supabase } from "@/lib/supabaseClient"; // Adjust path if needed
-import LeftColumn from "../../../components/LeftColumn";
+import LeftColumn from "../../../components/LeftColumnOnsite24";
 import TermsCondition from "../../../components/TermsCondition";
 import PrivacyPolicy from "../../../components/PrivacyPolicy";
 
@@ -31,7 +31,6 @@ export default function VerifyEmailPage() {
       let participantType: "onsite" | "online" | null = null;
       let token: string;
 
-      // 🔍 1. Check in onsite participants
       const { data: onsite } = await supabase
         .from("satf_participant_onsite_24")
         .select("email")
@@ -40,17 +39,6 @@ export default function VerifyEmailPage() {
 
       if (onsite) {
         participantType = "onsite";
-      } else {
-        // 🔍 2. If not in onsite, check online participants
-        const { data: online } = await supabase
-          .from("satf_participant_online_24")
-          .select("email")
-          .ilike("email", email)
-          .maybeSingle();
-
-        if (online) {
-          participantType = "online";
-        }
       }
 
       if (participantType) {

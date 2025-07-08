@@ -27,82 +27,38 @@ export default function VerifyEmailPage() {
     setLoading(true);
 
     try {
-      // 🔍 1. Check if already in sat_forum_registrations
-      const { data: registered } = await supabase
-        .from("sat_forum_registrations")
+      let isRegistered = false;
+      let token: string;
+
+      // 🔍 1. Check if already registered in onsite participants
+      const { data: onsite } = await supabase
+        .from("satf_participant_onsite_24")
         .select("email")
         .ilike("email", email)
         .maybeSingle();
 
-      let token: string;
-
-      if (registered) {
-        // 📬 2. Already registered — get or create token
-        const { data: existing } = await supabase
-          .from("sat_forum_email_verification")
-          .select("*")
-          .ilike("email", email)
-          .maybeSingle();
-
-        if (existing) {
-          // 🔁 Update attempts
-          await supabase
-            .from("sat_forum_email_verification")
-            .update({ attempts: (existing.attempts ?? 0) + 1 })
-            .ilike("email", email);
-
-          token = existing.token;
-        } else {
-          // 🆕 Insert new record with generated token
-          const newToken = crypto.randomUUID();
-          const { error: insertError } = await supabase
-            .from("sat_forum_email_verification")
-            .insert([{ email, token: newToken, attempts: 1 }]);
-
-          if (insertError) throw insertError;
-
-          token = newToken;
-        }
-
-        // ✉️ Send already registered email
-        const verificationUrl = `${
-          window.location.origin
-        }/verify?token=${token}&email=${encodeURIComponent(email)}`;
-        await emailjs.send(
-          "service_1qkyi2i",
-          "template_28r3rcr",
-          {
-            to_email: email,
-            verification_url: verificationUrl,
-            email,
-          },
-          "sOTpCYbD5KllwgbCD"
-        );
-
-        setSent(true);
-        return;
+      if (onsite) {
+        isRegistered = true;
       }
 
-      // 🔍 3. Not registered — check verification table
+      // 🔑 2. Get or create token from verification table
       const { data: existing } = await supabase
-        .from("sat_forum_email_verification")
+        .from("satf_verification_24")
         .select("*")
         .ilike("email", email)
         .maybeSingle();
 
       if (existing) {
-        // 🔁 Update attempts
         await supabase
-          .from("sat_forum_email_verification")
+          .from("satf_verification_24")
           .update({ attempts: (existing.attempts ?? 0) + 1 })
           .ilike("email", email);
 
         token = existing.token;
       } else {
-        // 🆕 Insert new
         const newToken = crypto.randomUUID();
         const { error: insertError } = await supabase
-          .from("sat_forum_email_verification")
+          .from("satf_verification_24")
           .insert([{ email, token: newToken, attempts: 1 }]);
 
         if (insertError) throw insertError;
@@ -110,13 +66,16 @@ export default function VerifyEmailPage() {
         token = newToken;
       }
 
-      // ✉️ Send new user email
+      // ✉️ 3. Send appropriate email
       const verificationUrl = `${
         window.location.origin
-      }/verify?token=${token}&email=${encodeURIComponent(email)}`;
+      }/registration/onsite/24-july?token=${token}&email=${encodeURIComponent(
+        email
+      )}`;
+
       await emailjs.send(
         "service_1qkyi2i",
-        "template_fwozquc",
+        isRegistered ? "template_28r3rcr" : "template_fwozquc",
         {
           to_email: email,
           verification_url: verificationUrl,
@@ -133,6 +92,7 @@ export default function VerifyEmailPage() {
       setLoading(false);
     }
   };
+
   return (
     <>
       <section className="flex flex-col justify-center items-center px-4 lg:px-8 max-w-[695px] w-full">
@@ -171,15 +131,8 @@ export default function VerifyEmailPage() {
                   }}
                 >
                   <p className="text-[14px] mb-8 italic">
-                    Please enter a valid and active email address (e.g.,
-                    example@domain.com). A confirmation link and Zoom access
-                    details will be sent to this email.
-                    <br />
-                    <br />
-                    <span className="text-red-600">
-                      Note: This is **online registration only** as onsite slots
-                      are already full.
-                    </span>
+                    Please enter a valid, active email (e.g.,
+                    example@domain.com). A confirmation link will be sent to it.
                   </p>
                   <label
                     htmlFor="email"
@@ -292,7 +245,7 @@ export default function VerifyEmailPage() {
           <div className="w-full flex flex-col gap-8 text-center lg:text-start">
             <div className="flex flex-col justify-center items-center lg:justify-start lg:items-start gap-4">
               <h4 className="text-[14px] lg:text-[20px] leading-[24px] tracking-[10px]">
-                JULY 17, 2025
+                JULY 24, 2025
               </h4>
               <h4
                 className="text-[14px] lg:text-[20px] lg:leading-[23px]"

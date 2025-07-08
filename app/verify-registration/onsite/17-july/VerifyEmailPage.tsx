@@ -4,7 +4,7 @@ import { useState } from "react";
 import emailjs from "@emailjs/browser";
 import Image from "next/image";
 import { supabase } from "@/lib/supabaseClient"; // Adjust path if needed
-import LeftColumn from "../../../components/LeftColumn";
+import LeftColumn from "../../../components/LeftColumnOnsite17";
 import TermsCondition from "../../../components/TermsCondition";
 import PrivacyPolicy from "../../../components/PrivacyPolicy";
 
@@ -28,10 +28,10 @@ export default function VerifyEmailPage() {
     setLoading(true);
 
     try {
-      let participantType: "onsite" | "online" | null = null;
+      let isRegistered = false;
       let token: string;
 
-      // 🔍 1. Check in onsite participants
+      // 🔍 1. Check if already registered in onsite participants
       const { data: onsite } = await supabase
         .from("satf_participant_onsite_17")
         .select("email")
@@ -39,71 +39,10 @@ export default function VerifyEmailPage() {
         .maybeSingle();
 
       if (onsite) {
-        participantType = "onsite";
-      } else {
-        // 🔍 2. If not in onsite, check online participants
-        const { data: online } = await supabase
-          .from("satf_participant_online_17")
-          .select("email")
-          .ilike("email", email)
-          .maybeSingle();
-
-        if (online) {
-          participantType = "online";
-        }
+        isRegistered = true;
       }
 
-      if (participantType) {
-        // 📬 Already registered — get or create token
-        const { data: existing } = await supabase
-          .from("satf_verification_17")
-          .select("*")
-          .ilike("email", email)
-          .maybeSingle();
-
-        if (existing) {
-          await supabase
-            .from("satf_verification_17")
-            .update({ attempts: (existing.attempts ?? 0) + 1 })
-            .ilike("email", email);
-
-          token = existing.token;
-        } else {
-          const newToken = crypto.randomUUID();
-          const { error: insertError } = await supabase
-            .from("satf_verification_17")
-            .insert([{ email, token: newToken, attempts: 1 }]);
-
-          if (insertError) throw insertError;
-
-          token = newToken;
-        }
-
-        // ✉️ Send registered user email
-        const verificationUrl = `${
-          window.location.origin
-        }/registration/onsite/17-july?token=${token}&email=${encodeURIComponent(
-          email
-        )}`;
-
-        await emailjs.send(
-          "service_1qkyi2i",
-          participantType === "onsite"
-            ? "template_fwozquc"
-            : "template_28r3rcr",
-          {
-            to_email: email,
-            verification_url: verificationUrl,
-            email,
-          },
-          "sOTpCYbD5KllwgbCD"
-        );
-
-        setSent(true);
-        return;
-      }
-
-      // 🚫 Not registered in either table — still send verification email
+      // 🔑 2. Get or create token from verification table
       const { data: existing } = await supabase
         .from("satf_verification_17")
         .select("*")
@@ -128,7 +67,7 @@ export default function VerifyEmailPage() {
         token = newToken;
       }
 
-      // ✉️ Send new user email (default to onsite for unregistered)
+      // ✉️ 3. Send appropriate email
       const verificationUrl = `${
         window.location.origin
       }/registration/onsite/17-july?token=${token}&email=${encodeURIComponent(
@@ -137,7 +76,7 @@ export default function VerifyEmailPage() {
 
       await emailjs.send(
         "service_1qkyi2i",
-        "template_fwozquc",
+        isRegistered ? "template_28r3rcr" : "template_fwozquc",
         {
           to_email: email,
           verification_url: verificationUrl,

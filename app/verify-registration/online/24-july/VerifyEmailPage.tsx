@@ -4,7 +4,7 @@ import { useState } from "react";
 import emailjs from "@emailjs/browser";
 import Image from "next/image";
 import { supabase } from "@/lib/supabaseClient"; // Adjust path if needed
-import LeftColumn from "../../../components/LeftColumn";
+import LeftColumn from "../../../components/LeftColumnOnline24";
 import TermsCondition from "../../../components/TermsCondition";
 import PrivacyPolicy from "../../../components/PrivacyPolicy";
 
@@ -28,95 +28,34 @@ export default function VerifyEmailPage() {
     setLoading(true);
 
     try {
-      let participantType: "onsite" | "online" | null = null;
+      let isAlreadyRegistered = false;
       let token: string;
 
-      // 🔍 1. Check in onsite participants
-      const { data: onsite } = await supabase
-        .from("satf_participant_onsite_24")
+      // 🔍 Check if already registered in satf_participant_online_17
+      const { data: existingOnline } = await supabase
+        .from("satf_participant_online_24")
         .select("email")
         .ilike("email", email)
         .maybeSingle();
 
-      if (onsite) {
-        participantType = "onsite";
-      } else {
-        // 🔍 2. If not in onsite, check online participants
-        const { data: online } = await supabase
-          .from("satf_participant_online_24")
-          .select("email")
-          .ilike("email", email)
-          .maybeSingle();
-
-        if (online) {
-          participantType = "online";
-        }
+      if (existingOnline) {
+        isAlreadyRegistered = true;
       }
 
-      if (participantType) {
-        // 📬 Already registered — get or create token
-        const { data: existing } = await supabase
-          .from("satf_verification_24")
-          .select("*")
-          .ilike("email", email)
-          .maybeSingle();
-
-        if (existing) {
-          await supabase
-            .from("satf_verification_24")
-            .update({ attempts: (existing.attempts ?? 0) + 1 })
-            .ilike("email", email);
-
-          token = existing.token;
-        } else {
-          const newToken = crypto.randomUUID();
-          const { error: insertError } = await supabase
-            .from("satf_verification_24")
-            .insert([{ email, token: newToken, attempts: 1 }]);
-
-          if (insertError) throw insertError;
-
-          token = newToken;
-        }
-
-        // ✉️ Send registered user email
-        const verificationUrl = `${
-          window.location.origin
-        }/registration/online/17-july?token=${token}&email=${encodeURIComponent(
-          email
-        )}`;
-
-        await emailjs.send(
-          "service_1qkyi2i",
-          participantType === "online"
-            ? "template_fwozquc"
-            : "template_4pa1s5i",
-          {
-            to_email: email,
-            verification_url: verificationUrl,
-            email,
-          },
-          "sOTpCYbD5KllwgbCD"
-        );
-
-        setSent(true);
-        return;
-      }
-
-      // 🚫 Not registered in either table — still send verification email
-      const { data: existing } = await supabase
+      // 🔑 Token logic
+      const { data: existingToken } = await supabase
         .from("satf_verification_24")
         .select("*")
         .ilike("email", email)
         .maybeSingle();
 
-      if (existing) {
+      if (existingToken) {
         await supabase
           .from("satf_verification_24")
-          .update({ attempts: (existing.attempts ?? 0) + 1 })
+          .update({ attempts: (existingToken.attempts ?? 0) + 1 })
           .ilike("email", email);
 
-        token = existing.token;
+        token = existingToken.token;
       } else {
         const newToken = crypto.randomUUID();
         const { error: insertError } = await supabase
@@ -128,15 +67,16 @@ export default function VerifyEmailPage() {
         token = newToken;
       }
 
+      // ✉️ Send appropriate email
       const verificationUrl = `${
         window.location.origin
-      }/registration/online/17-july?token=${token}&email=${encodeURIComponent(
+      }/registration/online/24-july?token=${token}&email=${encodeURIComponent(
         email
       )}`;
 
       await emailjs.send(
         "service_1qkyi2i",
-        "template_fwozquc",
+        isAlreadyRegistered ? "template_4pa1s5i" : "template_fwozquc",
         {
           to_email: email,
           verification_url: verificationUrl,
@@ -194,8 +134,15 @@ export default function VerifyEmailPage() {
                 }}
               >
                 <p className="text-[14px] mb-8 italic">
-                  Please enter a valid, active email (e.g., example@domain.com).
-                  A confirmation link will be sent to it.
+                  Please enter a valid and active email address (e.g.,
+                  example@domain.com). A confirmation link and Zoom access
+                  details will be sent to this email.
+                  <br />
+                  <br />
+                  <span className="text-red-600">
+                    Note: This is **online registration only** as onsite slots
+                    are already full.
+                  </span>
                 </p>
                 <label
                   htmlFor="email"

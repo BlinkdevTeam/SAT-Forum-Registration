@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 import { IoMdArrowRoundForward, IoMdArrowRoundBack } from "react-icons/io";
 import Image from "next/image";
 import countryCodes from "../../../../public/data/all_country_codes.json";
-import LeftColumn2 from "../../../components/LeftColumnOnsite24_2";
+import LeftColumn2 from "../../../components//LeftColumnOnline24_2";
 import { usePathname } from "next/navigation";
 
 export default function PersonalInfoForm() {
@@ -260,7 +260,7 @@ export default function PersonalInfoForm() {
     }
 
     const token = uuidv4();
-    const verificationUrl = `${window.location.origin}/registration/onsite/24-july?token=${token}`;
+    const verificationUrl = `${window.location.origin}/verify?token=${token}`;
 
     // 👇 Generate QR code from Me-QR
     const qrCodeUrl = await generateQRCode(email);
@@ -277,7 +277,7 @@ export default function PersonalInfoForm() {
 
       await emailjs.send(
         "service_1qkyi2i",
-        "template_28r3rcr",
+        "template_4pa1s5i",
         templateParams,
         "sOTpCYbD5KllwgbCD"
       );
@@ -302,7 +302,7 @@ export default function PersonalInfoForm() {
     try {
       // 🔍 Check if email already exists
       const { data: existingList, error: fetchError } = await supabase
-        .from("satf_participant_onsite_24")
+        .from("satf_participant_online_24")
         .select("id")
         .eq("email", formData.email);
 
@@ -323,7 +323,7 @@ export default function PersonalInfoForm() {
 
       // ✅ Proceed to insert
       const { data, error } = await supabase
-        .from("satf_participant_onsite_24")
+        .from("satf_participant_online_24")
         .insert([
           {
             email: formData.email,

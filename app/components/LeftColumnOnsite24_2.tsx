@@ -2,16 +2,15 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { supabase } from "../../../../lib/supabaseClient";
+import { supabase } from "../../lib/supabaseClient";
 import emailjs from "@emailjs/browser";
 import { v4 as uuidv4 } from "uuid";
 import { IoMdArrowRoundForward, IoMdArrowRoundBack } from "react-icons/io";
 import Image from "next/image";
-import countryCodes from "../../../../public/data/all_country_codes.json";
-import LeftColumn2 from "../../../components/LeftColumnOnsite24_2";
+import countryCodes from "../../public/data/all_country_codes.json";
 import { usePathname } from "next/navigation";
 
-export default function PersonalInfoForm() {
+export default function LeftColumn2() {
   const [step, setStep] = useState(3);
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -86,7 +85,7 @@ export default function PersonalInfoForm() {
   // End Event date selection
 
   const searchParams = useSearchParams();
-  const [status, setStatus] = useState<"verifying" | "success" | "invalid">(
+  const [, setStatus] = useState<"verifying" | "success" | "invalid">(
     "verifying"
   );
 
@@ -260,7 +259,7 @@ export default function PersonalInfoForm() {
     }
 
     const token = uuidv4();
-    const verificationUrl = `${window.location.origin}/registration/onsite/24-july?token=${token}`;
+    const verificationUrl = `${window.location.origin}/verify?token=${token}`;
 
     // 👇 Generate QR code from Me-QR
     const qrCodeUrl = await generateQRCode(email);
@@ -277,7 +276,7 @@ export default function PersonalInfoForm() {
 
       await emailjs.send(
         "service_1qkyi2i",
-        "template_28r3rcr",
+        "template_4pa1s5i",
         templateParams,
         "sOTpCYbD5KllwgbCD"
       );
@@ -302,7 +301,7 @@ export default function PersonalInfoForm() {
     try {
       // 🔍 Check if email already exists
       const { data: existingList, error: fetchError } = await supabase
-        .from("satf_participant_onsite_24")
+        .from("satf_participant_online_24")
         .select("id")
         .eq("email", formData.email);
 
@@ -323,7 +322,7 @@ export default function PersonalInfoForm() {
 
       // ✅ Proceed to insert
       const { data, error } = await supabase
-        .from("satf_participant_onsite_24")
+        .from("satf_participant_online_24")
         .insert([
           {
             email: formData.email,
@@ -391,36 +390,22 @@ export default function PersonalInfoForm() {
 
   return (
     <>
-      {/* <Image
-        src="/assets/HEX 2_1.png"
-        alt="Top Left"
-        width={1200}
-        height={1200}
-        className="hidden lg:flex absolute top-[-300px] left-[-300px] -z-10"
-      />
-
-      <Image
-        src="/assets/HEX 1_1.png"
-        alt="Bottom Right"
-        width={1200}
-        height={1200}
-        className="hidden lg:flex absolute bottom-[-255px] right-[-300px] -z-10"
-      /> */}
-      {status === "verifying" && (
-        <div className="max-w-full min-h-screen flex justify-center items-center">
-          {/* <p className="text-blue-600 text-lg font-medium">
-            Verifying token...
-          </p> */}
-          <div className="loader"></div>
-        </div>
-      )}
-      {status === "success" && (
-        <main className="grid grid-cols-1 lg:grid-cols-2 items-center justify-center w-full h-full py-20">
-          <LeftColumn2 />
-
-          {/* ------------------------------------------------------------------------------------- */}
-
-          <section className="hidden lg:flex px-4 lg:px-10">
+      <section className="flex flex-col justify-center items-center px-4 lg:px-8 max-w-[695px] w-full">
+        <div className="w-full flex flex-col gap-12">
+          <div className="flex flex-col justify-center items-center text-center lg:justify-start lg:items-start lg:text-start gap-8">
+            <Image
+              src="/assets/SATF_Logo.png"
+              alt="Bottom Right"
+              width={507}
+              height={69}
+              className="w-full max-w-[507px] h-auto"
+            />
+            <p className="text-[18px] leading-[23px]">
+              SATF is a forward-looking forum on breakthrough tech in animal
+              production—delivering expert insights that drive real-world gains.
+            </p>
+          </div>
+          <section className="flex lg:hidden px-2">
             <div className="flex flex-col gap-8 w-[502px] h-[592px] mx-auto bg-white rounded-[24px] shadow-md text-gray-600 relative">
               {!sent ? (
                 <>
@@ -1027,16 +1012,152 @@ export default function PersonalInfoForm() {
               )}
             </div>
           </section>
-
-          {/* ------------------------------------------------------------------------------------- */}
-        </main>
-      )}
-      {status === "invalid" && (
-        <div className="text-red-600 text-center">
-          <h2 className="text-2xl font-bold mb-2">Invalid or Expired Link</h2>
-          <p>Please check the verification link or try registering again.</p>
+          <div className="w-full flex flex-col gap-8 text-center lg:text-start">
+            <div className="flex flex-col justify-center items-center lg:justify-start lg:items-start gap-4">
+              <h4 className="text-[14px] lg:text-[20px] leading-[24px] tracking-[10px]">
+                JULY 17, 2025
+              </h4>
+              <h4
+                className="text-[14px] lg:text-[20px] lg:leading-[23px]"
+                style={{ fontWeight: 700 }}
+              >
+                Eggsponential Progress: Shaping the Future of Layer Production
+                with Confidence
+              </h4>
+              <div
+                className="w-20 md:w-40 h-0.5 lg:h-1 rounded"
+                style={{
+                  background:
+                    "linear-gradient(to right, blue, green, yellow, red)",
+                }}
+              ></div>
+            </div>
+            <div className="flex flex-col lg:flex-row gap-x-4 lg:gap-x-16 justify-center lg:justify-start items-center">
+              <div className="flex flex-col gap-y-8 w-fit">
+                <p className="text-[12px] lg:text-[16px] leading-[23px]">
+                  In partnership with
+                </p>
+                <div className="flex flex-wrap gap-8 justify-center items-center">
+                  <Image
+                    src="/assets/collaborations/Big_Dutchman_Logo.svg 1.png"
+                    alt="Big Dutchman"
+                    width={108}
+                    height={36}
+                    className="w-[100px] h-auto lg:w-[108px] lg:h-auto"
+                  />
+                  <Image
+                    src="/assets/collaborations/BI_LOGO_NEONGREEN 1.png"
+                    alt="BI Logo"
+                    width={80}
+                    height={24}
+                    className="w-[74px] h-auto lg:w-[80px] lg:h-auto"
+                  />
+                  <Image
+                    src="/assets/partners/DSM_FIRMENICH_WHITE_2 1.png"
+                    alt="DSM Logo"
+                    width={52}
+                    height={30}
+                    className="w-[48px] h-auto lg:w-[52px] lg:h-auto"
+                  />
+                  <Image
+                    src="/assets/collaborations/LOHMANN_Orange&White.png"
+                    alt="Lohmann Logo"
+                    width={152}
+                    height={53}
+                    className="w-[75px] h-auto lg:w-[82px] lg:h-auto"
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col gap-y-8 w-fit justify-center items-center">
+                <p className="text-[12px] lg:text-[16px] leading-[23px]">
+                  Powered by
+                </p>
+                <div className="flex gap-x-8 justify-center items-center">
+                  <Image
+                    src="/assets/partners/BCS_LOGO_ALT_WHITE 1.png"
+                    alt="Bottom Right"
+                    width={69}
+                    height={35}
+                    className="w-[60px] h-auto lg:w-[69] lg:h-[35px]"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col gap-8 text-center lg:text-start">
+            <div className="flex flex-col justify-center items-center lg:justify-start lg:items-start gap-4">
+              <h4 className="text-[14px] lg:text-[20px] leading-[24px] tracking-[10px]">
+                JULY 24, 2025
+              </h4>
+              <h4
+                className="text-[14px] lg:text-[20px] lg:leading-[23px]"
+                style={{ fontWeight: 700 }}
+              >
+                Pork Forward:  Trailblazing the Path to Advanced Swine
+                Production
+              </h4>
+              <div
+                className="w-20 md:w-40 h-0.5 lg:h-1 rounded"
+                style={{
+                  background:
+                    "linear-gradient(to right, blue, green, yellow, red)",
+                }}
+              ></div>
+            </div>
+            <div className="flex flex-col gap-y-8 lg:flex-row gap-x-4 lg:gap-x-[120px] justify-center items-center lg:justify-start lg:items-start">
+              <div className="flex flex-col gap-y-8 w-fit">
+                <p className="text-[12px] lg:text-[16px] leading-[23px]">
+                  In partnership with
+                </p>
+                <div className="flex flex-wrap gap-8 justify-center items-center">
+                  <Image
+                    src="/assets/collaborations/Big_Dutchman_Logo.svg 1.png"
+                    alt="Big Dutchman"
+                    width={108}
+                    height={36}
+                    className="w-[100px] h-auto lg:w-[108px] lg:h-auto"
+                  />
+                  <Image
+                    src="/assets/collaborations/BI_LOGO_NEONGREEN 1.png"
+                    alt="BI Logo"
+                    width={80}
+                    height={24}
+                    className="w-[74px] h-auto lg:w-[80px] lg:h-auto"
+                  />
+                  <Image
+                    src="/assets/partners/DSM_FIRMENICH_WHITE_2 1.png"
+                    alt="DSM Logo"
+                    width={52}
+                    height={30}
+                    className="w-[48px] h-auto lg:w-[52px] lg:h-auto"
+                  />
+                  <Image
+                    src="/assets/collaborations/cropped-cropped-pic_logo2 2.png"
+                    alt="Lohmann Logo"
+                    width={30}
+                    height={35}
+                    className="w-[27px] h-auto lg:w-[30px] lg:h-auto"
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col gap-y-8 w-fit justify-center items-center">
+                <p className="text-[12px] lg:text-[16px] leading-[23px]">
+                  Powered by
+                </p>
+                <div className="flex gap-x-8 justify-center items-center">
+                  <Image
+                    src="/assets/partners/BCS_LOGO_ALT_WHITE 1.png"
+                    alt="Bottom Right"
+                    width={69}
+                    height={35}
+                    className="w-[60px] h-auto lg:w-[69] lg:h-[35px]"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      )}
+      </section>
     </>
   );
 }
