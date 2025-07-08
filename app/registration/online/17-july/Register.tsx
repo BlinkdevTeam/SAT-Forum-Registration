@@ -371,6 +371,7 @@ export default function PersonalInfoForm() {
         });
         setStep(3);
       }
+      setSent(true);
     } catch (err) {
       console.error("Unexpected error:", err);
       alert("An unexpected error occurred.");
@@ -989,7 +990,7 @@ export default function PersonalInfoForm() {
                         You are successfully registered!{" "}
                       </p>
                       <p className="text-[18px] leading-[24px]">
-                        Check your Email to get you QR Code
+                        You will get the Zoom link once approved
                       </p>
 
                       <a

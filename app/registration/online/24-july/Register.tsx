@@ -253,6 +253,7 @@ export default function PersonalInfoForm() {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleSendEmail = async (email: string) => {
     if (!email || !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
       alert("Invalid email address.");
@@ -347,7 +348,7 @@ export default function PersonalInfoForm() {
         alert("Error submitting the form. Please try again.");
       } else {
         console.log("Saved data:", data);
-        await handleSendEmail(formData.email);
+        // await handleSendEmail(formData.email);
 
         // Reset form
         setFormData({
@@ -370,6 +371,7 @@ export default function PersonalInfoForm() {
         });
         setStep(3);
       }
+      setSent(true);
     } catch (err) {
       console.error("Unexpected error:", err);
       alert("An unexpected error occurred.");
@@ -988,7 +990,7 @@ export default function PersonalInfoForm() {
                         You are successfully registered!{" "}
                       </p>
                       <p className="text-[18px] leading-[24px]">
-                        Check your Email to get you QR Code
+                        You will get the Zoom link once approved
                       </p>
 
                       <a
