@@ -171,8 +171,15 @@ export default function VerifyEmailPage() {
                   }}
                 >
                   <p className="text-[14px] mb-8 italic">
-                    Please enter a valid, active email (e.g.,
-                    example@domain.com). A confirmation link will be sent to it.
+                    Please enter a valid and active email address (e.g.,
+                    example@domain.com). A confirmation link and Zoom access
+                    details will be sent to this email.
+                    <br />
+                    <br />
+                    <span className="text-red-600">
+                      Note: This is **online registration only** as onsite slots
+                      are already full.
+                    </span>
                   </p>
                   <label
                     htmlFor="email"
@@ -374,7 +381,7 @@ export default function VerifyEmailPage() {
                 }}
               ></div>
             </div>
-            <div className="flex flex-col gap-y-8 lg:flex-row gap-x-4 lg:gap-x-16 justify-center items-center lg:justify-start lg:items-start">
+            <div className="flex flex-col gap-y-8 lg:flex-row gap-x-4 lg:gap-x-[100px] justify-center items-center lg:justify-start lg:items-start">
               <div className="flex flex-col gap-y-8 w-fit">
                 <p className="text-[12px] lg:text-[16px] leading-[23px]">
                   In partnership with

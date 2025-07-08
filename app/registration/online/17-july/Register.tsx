@@ -2,60 +2,91 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { supabase } from "../../lib/supabaseClient";
+import { supabase } from "../../../../lib/supabaseClient";
 import emailjs from "@emailjs/browser";
 import { v4 as uuidv4 } from "uuid";
 import { IoMdArrowRoundForward, IoMdArrowRoundBack } from "react-icons/io";
 import Image from "next/image";
-import countryCodes from "../../public/data/all_country_codes.json";
+import countryCodes from "../../../../public/data/all_country_codes.json";
+import LeftColumn2 from "../../../components/LeftComun2";
+import { usePathname } from "next/navigation";
 
-export default function LeftColumn2() {
+export default function PersonalInfoForm() {
   const [step, setStep] = useState(3);
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
   const [showValidationModal, setShowValidationModal] = useState(false);
 
+  const pathname = usePathname();
+  useEffect(() => {
+    const path = pathname.toLowerCase();
+
+    // Determine participation_type
+    let participationType = "";
+    if (path.includes("onsite")) {
+      participationType = "onsite";
+    } else if (path.includes("online")) {
+      participationType = "online";
+    }
+
+    // Determine event selection
+    let selectedEvents: string[] = [];
+    if (path.includes("17")) {
+      selectedEvents = ["event1"];
+    } else if (path.includes("24")) {
+      selectedEvents = ["event2"];
+    }
+
+    // Update formData
+    setFormData((prev) => ({
+      ...prev,
+      participation_type: participationType || prev.participation_type,
+      selectedEvents:
+        selectedEvents.length > 0 ? selectedEvents : prev.selectedEvents,
+    }));
+  }, [pathname]);
+
   // Start Event date selection
   // const [selectedEvents, setSelectedEvents] = useState([]);
 
-  const handleCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, checked } = e.target;
+  // const handleCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const { value, checked } = e.target;
 
-    setFormData((prev) => {
-      const updatedEvents = checked
-        ? [...prev.selectedEvents, value]
-        : prev.selectedEvents.filter((event) => event !== value);
+  //   setFormData((prev) => {
+  //     const updatedEvents = checked
+  //       ? [...prev.selectedEvents, value]
+  //       : prev.selectedEvents.filter((event) => event !== value);
 
-      return {
-        ...prev,
-        selectedEvents: updatedEvents,
-      };
-    });
-  };
+  //     return {
+  //       ...prev,
+  //       selectedEvents: updatedEvents,
+  //     };
+  //   });
+  // };
 
-  const renderSelectedText = () => {
-    if (!formData.selectedEvents || formData.selectedEvents.length === 0) {
-      return "⚠️ Please select at least one event.";
-    }
+  // const renderSelectedText = () => {
+  //   if (!formData.selectedEvents || formData.selectedEvents.length === 0) {
+  //     return "⚠️ Please select at least one event.";
+  //   }
 
-    if (formData.selectedEvents.length === 1) {
-      return formData.selectedEvents[0] === "event1"
-        ? "July 17, 2025 | Future Laid: Innovation Beyond the Shell"
-        : "July 24, 2025 | Beyond the Pen: Reimagining Swine Through Innovation";
-    }
+  //   if (formData.selectedEvents.length === 1) {
+  //     return formData.selectedEvents[0] === "event1"
+  //       ? "July 17, 2025 | Future Laid: Innovation Beyond the Shell"
+  //       : "July 24, 2025 | Beyond the Pen: Reimagining Swine Through Innovation";
+  //   }
 
-    if (formData.selectedEvents.length === 2) {
-      return `You have selected both events:\n• July 17, 2025 | Future Laid: Innovation Beyond the Shell\n• July 24, 2025 | Beyond the Pen: Reimagining Swine Through Innovation`;
-    }
+  //   if (formData.selectedEvents.length === 2) {
+  //     return `You have selected both events:\n• July 17, 2025 | Future Laid: Innovation Beyond the Shell\n• July 24, 2025 | Beyond the Pen: Reimagining Swine Through Innovation`;
+  //   }
 
-    return ""; // fallback
-  };
+  //   return "";
+  // };
 
   // End Event date selection
 
   const searchParams = useSearchParams();
-  const [, setStatus] = useState<"verifying" | "success" | "invalid">(
+  const [status, setStatus] = useState<"verifying" | "success" | "invalid">(
     "verifying"
   );
 
@@ -70,7 +101,7 @@ export default function LeftColumn2() {
       }
 
       const { data, error } = await supabase
-        .from("sat_forum_email_verification")
+        .from("satf_verification_17")
         .select("*")
         .eq("email", decodeURIComponent(email))
         .eq("token", token)
@@ -81,7 +112,7 @@ export default function LeftColumn2() {
       } else {
         // Optionally mark it verified
         await supabase
-          .from("sat_forum_email_verification")
+          .from("satf_verification_17")
           .update({ verified: true })
           .eq("email", decodeURIComponent(email))
           .eq("token", token);
@@ -160,13 +191,13 @@ export default function LeftColumn2() {
   const validateForm = () => {
     const errors: { [key: string]: string } = {};
 
-    if (step === 3) {
-      if (!formData.selectedEvents || formData.selectedEvents.length === 0) {
-        errors["selectedEvents"] = "Please select at least one event.";
-      }
-    }
+    // if (step === 3) {
+    //   if (!formData.selectedEvents || formData.selectedEvents.length === 0) {
+    //     errors["selectedEvents"] = "Please select at least one event.";
+    //   }
+    // }
 
-    if (step === 4) {
+    if (step === 3) {
       if (!formData.email.trim()) errors.email = "Email is required";
       if (!formData.firstName.trim())
         errors.firstName = "First name is required";
@@ -175,7 +206,7 @@ export default function LeftColumn2() {
         errors.cellphone = "Phone number is required";
     }
 
-    if (step === 5) {
+    if (step === 4) {
       if (!formData.address?.barangay) {
         errors["address.barangay"] = "Barangay is required";
       }
@@ -187,7 +218,7 @@ export default function LeftColumn2() {
       }
     }
 
-    if (step === 6) {
+    if (step === 5) {
       if (!formData.participation_type) {
         errors["participation_type"] = "Please select a participation type";
       }
@@ -246,7 +277,7 @@ export default function LeftColumn2() {
 
       await emailjs.send(
         "service_1qkyi2i",
-        "template_28r3rcr",
+        "template_4pa1s5i",
         templateParams,
         "sOTpCYbD5KllwgbCD"
       );
@@ -271,7 +302,7 @@ export default function LeftColumn2() {
     try {
       // 🔍 Check if email already exists
       const { data: existingList, error: fetchError } = await supabase
-        .from("sat_forum_registrations")
+        .from("satf_participant_online_17")
         .select("id")
         .eq("email", formData.email);
 
@@ -286,13 +317,13 @@ export default function LeftColumn2() {
           ...prev,
           email: "This email is already registered.",
         }));
-        setStep(4);
+        setStep(3);
         return;
       }
 
       // ✅ Proceed to insert
       const { data, error } = await supabase
-        .from("sat_forum_registrations")
+        .from("satf_participant_online_17")
         .insert([
           {
             email: formData.email,
@@ -347,39 +378,54 @@ export default function LeftColumn2() {
 
   const nextStep = () => {
     // Only validate on step 3, 4, 5, or 6
-    if (step === 3 || step === 4 || step === 5 || step === 6) {
+    if (step === 3 || step === 4 || step === 5) {
       const isValid = validateForm();
       if (!isValid) return; // prevent going to next step if invalid
     }
 
-    // Allow progressing up to step 6 (final step)
-    setStep((prev) => Math.min(prev + 1, 6));
+    // Allow progressing up to step 5 (final step)
+    setStep((prev) => Math.min(prev + 1, 5));
   };
 
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 3));
+
   return (
     <>
-      <section className="flex flex-col justify-center items-center px-4 lg:px-8 max-w-[695px] w-full">
-        <div className="w-full flex flex-col gap-12">
-          <div className="flex flex-col justify-center items-center text-center lg:justify-start lg:items-start lg:text-start gap-8">
-            <Image
-              src="/assets/SATF_Logo.png"
-              alt="Bottom Right"
-              width={507}
-              height={69}
-              className="w-full max-w-[507px] h-auto"
-            />
-            <p className="text-[18px] leading-[23px]">
-              SATF is a forward-looking forum on breakthrough tech in animal
-              production—delivering expert insights that drive real-world gains.
-            </p>
-          </div>
-          <section className="flex lg:hidden">
-            <div className="flex flex-col gap-8 w-[502px] h-auto pb-20 mx-auto bg-white rounded-[24px] shadow-md text-gray-600 relative">
+      {/* <Image
+        src="/assets/HEX 2_1.png"
+        alt="Top Left"
+        width={1200}
+        height={1200}
+        className="hidden lg:flex absolute top-[-300px] left-[-300px] -z-10"
+      />
+
+      <Image
+        src="/assets/HEX 1_1.png"
+        alt="Bottom Right"
+        width={1200}
+        height={1200}
+        className="hidden lg:flex absolute bottom-[-255px] right-[-300px] -z-10"
+      /> */}
+      {status === "verifying" && (
+        <div className="max-w-full min-h-screen flex justify-center items-center">
+          {/* <p className="text-blue-600 text-lg font-medium">
+            Verifying token...
+          </p> */}
+          <div className="loader"></div>
+        </div>
+      )}
+      {status === "success" && (
+        <main className="grid grid-cols-1 lg:grid-cols-2 items-center justify-center w-full h-full py-20">
+          <LeftColumn2 />
+
+          {/* ------------------------------------------------------------------------------------- */}
+
+          <section className="hidden lg:flex px-4 lg:px-10">
+            <div className="flex flex-col gap-8 w-[502px] h-[592px] mx-auto bg-white rounded-[24px] shadow-md text-gray-600 relative">
               {!sent ? (
                 <>
                   <div className="p-12">
-                    {step === 3 && (
+                    {/* {step === 3 && (
                       <div className="grid gap-6 text-black">
                         <div className="w-fit h-auto">
                           <h1 className="text-[30px] font-bold">
@@ -493,9 +539,9 @@ export default function LeftColumn2() {
                           </p>
                         </div>
                       </div>
-                    )}
+                    )} */}
 
-                    {step === 4 && (
+                    {step === 3 && (
                       <div className="grid gap-6 text-black">
                         <div className="w-fit h-auto">
                           <h1 className="text-[30px] font-bold">
@@ -637,7 +683,7 @@ export default function LeftColumn2() {
                       </div>
                     )}
 
-                    {step === 5 && (
+                    {step === 4 && (
                       <div className="grid gap-2 text-black">
                         {/* Street Address (Optional) */}
                         <div className="flex flex-col gap-2 pb-6">
@@ -755,7 +801,7 @@ export default function LeftColumn2() {
                       </div>
                     )}
 
-                    {step === 6 && (
+                    {step === 5 && (
                       <div className="grid gap-2 text-black">
                         {/* Company / Organization */}
                         <div className="flex flex-col gap-2">
@@ -812,7 +858,7 @@ export default function LeftColumn2() {
                         </div>
 
                         {/* Participation Type */}
-                        <div className="flex flex-col gap-2">
+                        {/* <div className="flex flex-col gap-2">
                           <label className="block text-[14px] font-medium mb-1">
                             Select Your Participation Type
                           </label>
@@ -872,10 +918,10 @@ export default function LeftColumn2() {
                           >
                             {formErrors.participation_type || "Placeholder"}
                           </span>
-                        </div>
+                        </div> */}
                       </div>
                     )}
-                    {step === 6 && !sent && (
+                    {step === 5 && !sent && (
                       <div className="">
                         <button
                           onClick={handleSubmit}
@@ -914,7 +960,7 @@ export default function LeftColumn2() {
                       </div>
 
                       <div className="flex gap-2">
-                        {[1, 2, 3, 4].map((i) => (
+                        {[1, 2, 3].map((i) => (
                           <div
                             key={i}
                             className={`w-3 h-3 rounded-full ${
@@ -946,7 +992,7 @@ export default function LeftColumn2() {
                       </p>
 
                       <a
-                        href="https://blinkcreativestudio.com"
+                        href="https://www.blinkcreativestudio.com/Species-Advancement-Tech-Forum"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="w-full flex justify-center items-center mt-6 text-white px-4 py-4 rounded bg-[linear-gradient(to_right,_#0060DC,_#00E071)] hover:opacity-90 cursor-pointer"
@@ -981,152 +1027,16 @@ export default function LeftColumn2() {
               )}
             </div>
           </section>
-          <div className="w-full flex flex-col gap-8 text-center lg:text-start">
-            <div className="flex flex-col justify-center items-center lg:justify-start lg:items-start gap-4">
-              <h4 className="text-[14px] lg:text-[20px] leading-[24px] tracking-[10px]">
-                JULY 17, 2025
-              </h4>
-              <h4
-                className="text-[14px] lg:text-[20px] lg:leading-[23px]"
-                style={{ fontWeight: 700 }}
-              >
-                Eggsponential Progress: Shaping the Future of Layer Production
-                with Confidence
-              </h4>
-              <div
-                className="w-20 md:w-40 h-0.5 lg:h-1 rounded"
-                style={{
-                  background:
-                    "linear-gradient(to right, blue, green, yellow, red)",
-                }}
-              ></div>
-            </div>
-            <div className="flex flex-col lg:flex-row gap-x-4 lg:gap-x-16 justify-center lg:justify-start items-center">
-              <div className="flex flex-col gap-y-8 w-fit">
-                <p className="text-[12px] lg:text-[16px] leading-[23px]">
-                  In partnership with
-                </p>
-                <div className="flex flex-wrap gap-8 justify-center items-center">
-                  <Image
-                    src="/assets/collaborations/Big_Dutchman_Logo.svg 1.png"
-                    alt="Big Dutchman"
-                    width={108}
-                    height={36}
-                    className="w-[100px] h-auto lg:w-[108px] lg:h-auto"
-                  />
-                  <Image
-                    src="/assets/collaborations/BI_LOGO_NEONGREEN 1.png"
-                    alt="BI Logo"
-                    width={80}
-                    height={24}
-                    className="w-[74px] h-auto lg:w-[80px] lg:h-auto"
-                  />
-                  <Image
-                    src="/assets/partners/DSM_FIRMENICH_WHITE_2 1.png"
-                    alt="DSM Logo"
-                    width={52}
-                    height={30}
-                    className="w-[48px] h-auto lg:w-[52px] lg:h-auto"
-                  />
-                  <Image
-                    src="/assets/collaborations/LOHMANN_Orange&White.png"
-                    alt="Lohmann Logo"
-                    width={152}
-                    height={53}
-                    className="w-[75px] h-auto lg:w-[82px] lg:h-auto"
-                  />
-                </div>
-              </div>
-              <div className="flex flex-col gap-y-8 w-fit justify-center items-center">
-                <p className="text-[12px] lg:text-[16px] leading-[23px]">
-                  Powered by
-                </p>
-                <div className="flex gap-x-8 justify-center items-center">
-                  <Image
-                    src="/assets/partners/BCS_LOGO_ALT_WHITE 1.png"
-                    alt="Bottom Right"
-                    width={69}
-                    height={35}
-                    className="w-[60px] h-auto lg:w-[69] lg:h-[35px]"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-8 text-center lg:text-start">
-            <div className="flex flex-col justify-center items-center lg:justify-start lg:items-start gap-4">
-              <h4 className="text-[14px] lg:text-[20px] leading-[24px] tracking-[10px]">
-                JULY 24, 2025
-              </h4>
-              <h4
-                className="text-[14px] lg:text-[20px] lg:leading-[23px]"
-                style={{ fontWeight: 700 }}
-              >
-                Pork Forward:  Trailblazing the Path to Advanced Swine
-                Production
-              </h4>
-              <div
-                className="w-20 md:w-40 h-0.5 lg:h-1 rounded"
-                style={{
-                  background:
-                    "linear-gradient(to right, blue, green, yellow, red)",
-                }}
-              ></div>
-            </div>
-            <div className="flex flex-col gap-y-8 lg:flex-row gap-x-4 lg:gap-x-[120px] justify-center items-center lg:justify-start lg:items-start">
-              <div className="flex flex-col gap-y-8 w-fit">
-                <p className="text-[12px] lg:text-[16px] leading-[23px]">
-                  In partnership with
-                </p>
-                <div className="flex flex-wrap gap-8 justify-center items-center">
-                  <Image
-                    src="/assets/collaborations/Big_Dutchman_Logo.svg 1.png"
-                    alt="Big Dutchman"
-                    width={108}
-                    height={36}
-                    className="w-[100px] h-auto lg:w-[108px] lg:h-auto"
-                  />
-                  <Image
-                    src="/assets/collaborations/BI_LOGO_NEONGREEN 1.png"
-                    alt="BI Logo"
-                    width={80}
-                    height={24}
-                    className="w-[74px] h-auto lg:w-[80px] lg:h-auto"
-                  />
-                  <Image
-                    src="/assets/partners/DSM_FIRMENICH_WHITE_2 1.png"
-                    alt="DSM Logo"
-                    width={52}
-                    height={30}
-                    className="w-[48px] h-auto lg:w-[52px] lg:h-auto"
-                  />
-                  <Image
-                    src="/assets/collaborations/cropped-cropped-pic_logo2 2.png"
-                    alt="Lohmann Logo"
-                    width={30}
-                    height={35}
-                    className="w-[27px] h-auto lg:w-[30px] lg:h-auto"
-                  />
-                </div>
-              </div>
-              <div className="flex flex-col gap-y-8 w-fit justify-center items-center">
-                <p className="text-[12px] lg:text-[16px] leading-[23px]">
-                  Powered by
-                </p>
-                <div className="flex gap-x-8 justify-center items-center">
-                  <Image
-                    src="/assets/partners/BCS_LOGO_ALT_WHITE 1.png"
-                    alt="Bottom Right"
-                    width={69}
-                    height={35}
-                    className="w-[60px] h-auto lg:w-[69] lg:h-[35px]"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+
+          {/* ------------------------------------------------------------------------------------- */}
+        </main>
+      )}
+      {status === "invalid" && (
+        <div className="text-red-600 text-center">
+          <h2 className="text-2xl font-bold mb-2">Invalid or Expired Link</h2>
+          <p>Please check the verification link or try registering again.</p>
         </div>
-      </section>
+      )}
     </>
   );
 }

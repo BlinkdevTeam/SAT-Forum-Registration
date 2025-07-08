@@ -1,15 +1,13 @@
 "use client";
 
-import EmailVerificationPage from "./EmailVerification/page";
-// import Sample from "./EmailVerification/sample";
+import { useEffect } from "react";
 
 export default function Base() {
-  return (
-    <>
-      <div>
-        <EmailVerificationPage />
-        {/* <Sample /> */}
-      </div>
-    </>
-  );
+  useEffect(() => {
+    window.location.href =
+      "https://www.blinkcreativestudio.com/Species-Advancement-Tech-Forum";
+  }, []);
+
+  return null; // or a loading spinner if needed
 }
+
