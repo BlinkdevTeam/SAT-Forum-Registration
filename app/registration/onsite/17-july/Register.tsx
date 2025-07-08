@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 import { IoMdArrowRoundForward, IoMdArrowRoundBack } from "react-icons/io";
 import Image from "next/image";
 import countryCodes from "../../../../public/data/all_country_codes.json";
-import LeftColumn2 from "../../../components/LeftComun2";
+import LeftColumn2 from "../../../components/LeftColumnOnsite17_2";
 import { usePathname } from "next/navigation";
 
 export default function PersonalInfoForm() {

@@ -6,6 +6,7 @@ import Image from "next/image";
 import { supabase } from "@/lib/supabaseClient"; // Adjust path if needed
 import TermsCondition from "./TermsCondition";
 import PrivacyPolicy from "./PrivacyPolicy";
+import { v4 as uuidv4 } from "uuid";
 
 export default function VerifyEmailPage() {
   const [email, setEmail] = useState("");
@@ -56,7 +57,7 @@ export default function VerifyEmailPage() {
 
         token = existingToken.token;
       } else {
-        const newToken = crypto.randomUUID();
+        const newToken = uuidv4(); // ✅ FIXED
         const { error: insertError } = await supabase
           .from("satf_verification_17")
           .insert([{ email, token: newToken, attempts: 1 }]);

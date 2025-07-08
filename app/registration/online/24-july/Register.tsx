@@ -277,7 +277,7 @@ export default function PersonalInfoForm() {
 
       await emailjs.send(
         "service_1qkyi2i",
-        "template_4pa1s5i",
+        "template_3bijwnb",
         templateParams,
         "sOTpCYbD5KllwgbCD"
       );

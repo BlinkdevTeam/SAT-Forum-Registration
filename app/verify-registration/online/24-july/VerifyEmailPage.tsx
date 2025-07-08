@@ -76,7 +76,7 @@ export default function VerifyEmailPage() {
 
       await emailjs.send(
         "service_1qkyi2i",
-        isAlreadyRegistered ? "template_4pa1s5i" : "template_fwozquc",
+        isAlreadyRegistered ? "template_3bijwnb" : "template_fwozquc",
         {
           to_email: email,
           verification_url: verificationUrl,

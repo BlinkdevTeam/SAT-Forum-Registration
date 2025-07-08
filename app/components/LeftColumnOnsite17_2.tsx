@@ -276,7 +276,7 @@ export default function LeftColumn2() {
 
       await emailjs.send(
         "service_1qkyi2i",
-        "template_4pa1s5i",
+        "template_28r3rcr",
         templateParams,
         "sOTpCYbD5KllwgbCD"
       );
@@ -301,7 +301,7 @@ export default function LeftColumn2() {
     try {
       // 🔍 Check if email already exists
       const { data: existingList, error: fetchError } = await supabase
-        .from("satf_participant_online_17")
+        .from("satf_participant_onsite_17")
         .select("id")
         .eq("email", formData.email);
 
@@ -322,7 +322,7 @@ export default function LeftColumn2() {
 
       // ✅ Proceed to insert
       const { data, error } = await supabase
-        .from("satf_participant_online_17")
+        .from("satf_participant_onsite_17")
         .insert([
           {
             email: formData.email,

@@ -347,7 +347,7 @@ export default function PersonalInfoForm() {
         alert("Error submitting the form. Please try again.");
       } else {
         console.log("Saved data:", data);
-        await handleSendEmail(formData.email);
+        // await handleSendEmail(formData.email);
 
         // Reset form
         setFormData({

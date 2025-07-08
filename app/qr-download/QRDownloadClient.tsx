@@ -28,50 +28,73 @@ export default function QRDownloadClient() {
         return;
       }
 
-      const { data, error } = await supabase
-        .from("sat_forum_registrations")
-        .select("first_name_upper, last_name_upper, selected_events")
-        .ilike("email", decodeURIComponent(email))
-        .single();
+      const decodedEmail = decodeURIComponent(email);
 
-      if (error || !data) {
-        console.error("Supabase error:", error);
+      const [res1, res2] = await Promise.all([
+        supabase
+          .from("satf_participant_onsite_17")
+          .select("first_name_upper, last_name_upper, selected_events")
+          .ilike("email", decodedEmail)
+          .maybeSingle(),
+        supabase
+          .from("satf_participant_onsite_24")
+          .select("first_name_upper, last_name_upper, selected_events")
+          .ilike("email", decodedEmail)
+          .maybeSingle(),
+      ]);
+
+      const data1 = res1.data;
+      const data2 = res2.data;
+
+      if (!data1 && !data2) {
         setIsValidEmail(false);
-      } else {
-        setIsValidEmail(true);
-        setUserName(`${data.first_name_upper} ${data.last_name_upper}`);
-
-        const events = data.selected_events || [];
-
-        const hasEvent1 = events.includes("event1");
-        const hasEvent2 = events.includes("event2");
-
-        let date = "";
-        const titles: string[] = [];
-
-        if (hasEvent1 && hasEvent2) {
-          setSelectedCase("both");
-          date = "JULY 17&24, 2025";
-          titles.push(
-            "Eggsponential Progress: The Future of Layer Farming",
-            "Pork Forward: Trailblazing the Path to Advanced Swine Production"
-          );
-        } else if (hasEvent1) {
-          setSelectedCase("event1");
-          date = "JULY 17, 2025";
-          titles.push("Eggsponential Progress: The Future of Layer Farming");
-        } else if (hasEvent2) {
-          setSelectedCase("event2");
-          date = "JULY 24, 2025";
-          titles.push(
-            "Pork Forward: Trailblazing the Path to Advanced Swine Production"
-          );
-        }
-
-        setEventDate(date);
-        setEventTitles(titles);
+        setIsLoading(false);
+        return;
       }
 
+      setIsValidEmail(true);
+
+      const name =
+        data1?.first_name_upper && data1?.last_name_upper
+          ? `${data1.first_name_upper} ${data1.last_name_upper}`
+          : data2?.first_name_upper && data2?.last_name_upper
+          ? `${data2.first_name_upper} ${data2.last_name_upper}`
+          : null;
+
+      setUserName(name);
+
+      const hasEvent1 =
+        data1?.selected_events?.includes("event1") ||
+        data2?.selected_events?.includes("event1");
+
+      const hasEvent2 =
+        data1?.selected_events?.includes("event2") ||
+        data2?.selected_events?.includes("event2");
+
+      let date = "";
+      const titles: string[] = [];
+
+      if (hasEvent1 && hasEvent2) {
+        setSelectedCase("both");
+        date = "JULY 17&24, 2025";
+        titles.push(
+          "Eggsponential Progress: The Future of Layer Farming",
+          "Pork Forward: Trailblazing the Path to Advanced Swine Production"
+        );
+      } else if (hasEvent1) {
+        setSelectedCase("event1");
+        date = "JULY 17, 2025";
+        titles.push("Eggsponential Progress: The Future of Layer Farming");
+      } else if (hasEvent2) {
+        setSelectedCase("event2");
+        date = "JULY 24, 2025";
+        titles.push(
+          "Pork Forward: Trailblazing the Path to Advanced Swine Production"
+        );
+      }
+
+      setEventDate(date);
+      setEventTitles(titles);
       setIsLoading(false);
     };
 
@@ -87,11 +110,10 @@ export default function QRDownloadClient() {
         Array.from(images).map(
           (img) =>
             new Promise<void>((resolve) => {
-              if (img.complete) {
-                resolve();
-              } else {
+              if (img.complete) resolve();
+              else {
                 img.onload = () => resolve();
-                img.onerror = () => resolve(); // Avoid blocking
+                img.onerror = () => resolve();
               }
             })
         )
@@ -115,7 +137,7 @@ export default function QRDownloadClient() {
             }
           });
         });
-      }, 300); // small delay to ensure rendering
+      }, 300);
     };
 
     captureImage();
@@ -168,8 +190,6 @@ export default function QRDownloadClient() {
           paddingBlock: "60px",
           textAlign: "center",
           color: "#000",
-          // fontFamily:
-          //   "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
           position: "relative",
         }}
       >

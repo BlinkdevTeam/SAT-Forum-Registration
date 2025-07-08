@@ -259,7 +259,7 @@ export default function LeftColumn2() {
     }
 
     const token = uuidv4();
-    const verificationUrl = `${window.location.origin}/verify?token=${token}`;
+    const verificationUrl = `${window.location.origin}/registration/onsite/24-july?token=${token}`;
 
     // 👇 Generate QR code from Me-QR
     const qrCodeUrl = await generateQRCode(email);
@@ -276,7 +276,7 @@ export default function LeftColumn2() {
 
       await emailjs.send(
         "service_1qkyi2i",
-        "template_4pa1s5i",
+        "template_28r3rcr",
         templateParams,
         "sOTpCYbD5KllwgbCD"
       );
@@ -301,7 +301,7 @@ export default function LeftColumn2() {
     try {
       // 🔍 Check if email already exists
       const { data: existingList, error: fetchError } = await supabase
-        .from("satf_participant_online_24")
+        .from("satf_participant_onsite_24")
         .select("id")
         .eq("email", formData.email);
 
@@ -322,7 +322,7 @@ export default function LeftColumn2() {
 
       // ✅ Proceed to insert
       const { data, error } = await supabase
-        .from("satf_participant_online_24")
+        .from("satf_participant_onsite_24")
         .insert([
           {
             email: formData.email,
