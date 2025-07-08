@@ -253,6 +253,7 @@ export default function PersonalInfoForm() {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleSendEmail = async (email: string) => {
     if (!email || !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
       alert("Invalid email address.");
