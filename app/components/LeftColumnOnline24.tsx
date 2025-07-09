@@ -135,12 +135,12 @@ export default function VerifyEmailPage() {
                     Please enter a valid and active email address (e.g.,
                     example@domain.com). A confirmation link and Zoom access
                     details will be sent to this email.
-                    <br />
+                    {/* <br />
                     <br />
                     <span className="text-red-600">
                       Note: This is **online registration only** as onsite slots
                       are already full.
-                    </span>
+                    </span> */}
                   </p>
                   <label
                     htmlFor="email"
