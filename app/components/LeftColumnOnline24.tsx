@@ -253,7 +253,7 @@ export default function VerifyEmailPage() {
           <div className="w-full flex flex-col gap-8 text-center lg:text-start">
             <div className="flex flex-col justify-center items-center lg:justify-start lg:items-start gap-4">
               <h4 className="text-[14px] lg:text-[20px] leading-[24px] tracking-[10px]">
-                JULY 24, 2025
+                JULY 17, 2025
               </h4>
               <h4
                 className="text-[14px] lg:text-[20px] lg:leading-[23px]"
