@@ -252,6 +252,7 @@ export default function LeftColumn2() {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleSendEmail = async (email: string) => {
     if (!email || !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
       alert("Invalid email address.");
@@ -346,7 +347,7 @@ export default function LeftColumn2() {
         alert("Error submitting the form. Please try again.");
       } else {
         console.log("Saved data:", data);
-        await handleSendEmail(formData.email);
+        // await handleSendEmail(formData.email);
 
         // Reset form
         setFormData({
@@ -369,6 +370,7 @@ export default function LeftColumn2() {
         });
         setStep(3);
       }
+      setSent(true);
     } catch (err) {
       console.error("Unexpected error:", err);
       alert("An unexpected error occurred.");
