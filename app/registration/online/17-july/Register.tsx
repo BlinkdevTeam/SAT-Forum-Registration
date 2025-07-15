@@ -222,6 +222,10 @@ export default function PersonalInfoForm() {
       if (!formData.participation_type) {
         errors["participation_type"] = "Please select a participation type";
       }
+      if (!formData.company_organization.trim())
+        errors.company_organization = "Company / Organization is required";
+      if (!formData.designation_jobtitle.trim())
+        errors.designation_jobtitle = "Designation / Job Title is required";
     }
 
     setFormErrors(errors);
