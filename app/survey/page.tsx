@@ -179,145 +179,147 @@ const SurveyPage = () => {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="max-w-2xl h-auto mx-auto p-12 bg-white shadow rounded space-y-6 my-20 text-gray-800"
-    >
-      <div className="w-fit h-auto">
-        <h1 className="text-[30px] font-bold">Survey</h1>
-        <div
-          className="w-24 h-1 rounded"
-          style={{
-            background: "linear-gradient(to right, blue, green, yellow, red)",
-          }}
-        ></div>
-      </div>
-      <p className="text-[14px] mb-8 italic">
-        Please enter the <strong>same email</strong> you used during
-        registration. This will be used to validate your participation and
-        generate your certificate.
-      </p>
-
-      <label className="block">
-        Your Email:
-        <input
-          name="email"
-          type="email"
-          required
-          className="w-full border p-2 mt-1 rounded"
-          value={form.email}
-          onChange={handleChange}
-        />
-      </label>
-
-      <div>
-        <p className="font-semibold">1. Which part(s) did you attend?</p>
-        {["SATF Main Forum", "B2B Connect"].map((label) => (
-          <label key={label} className="block cursor-pointer">
-            <input
-              type="checkbox"
-              value={label}
-              checked={form.partsAttended.includes(label)}
-              onChange={(e) => handleCheckbox(e, "partsAttended")}
-            />{" "}
-            {label}
-          </label>
-        ))}
-      </div>
-
-      <div>
-        <p className="font-semibold">
-          2. How would you rate your overall experience?
-        </p>
-        {["Excellent", "Good", "Average", "Poor"].map((option) => (
-          <label key={option} className="block cursor-pointer">
-            <input
-              type="radio"
-              name="experience"
-              value={option}
-              checked={form.experience === option}
-              onChange={handleChange}
-              required
-            />{" "}
-            {option}
-          </label>
-        ))}
-        <textarea
-          name="standout"
-          placeholder="Optional: What stood out to you the most?"
-          className="w-full border p-2 mt-2 rounded"
-          value={form.standout}
-          onChange={handleChange}
-        />
-      </div>
-
-      <div>
-        <p className="font-semibold">3. Which track(s) did you attend?</p>
-        {["Layers – July 17, 2025", "Swine – July 24, 2025"].map((label) => (
-          <label key={label} className="block cursor-pointer">
-            <input
-              type="checkbox"
-              value={label}
-              checked={form.tracksAttended.includes(label)}
-              onChange={(e) => handleCheckbox(e, "tracksAttended")}
-            />{" "}
-            {label}
-          </label>
-        ))}
-      </div>
-
-      <div>
-        <p className="font-semibold">
-          4. Was the information or engagement relevant?
-        </p>
-        {["Yes", "Somewhat", "No"].map((option) => (
-          <label key={option} className="block cursor-pointer">
-            <input
-              type="radio"
-              name="relevance"
-              value={option}
-              checked={form.relevance === option}
-              onChange={handleChange}
-              required
-            />{" "}
-            {option}
-          </label>
-        ))}
-        <textarea
-          name="mostValuable"
-          placeholder="Optional: What topic or company did you find most valuable?"
-          className="w-full border p-2 mt-2 rounded"
-          value={form.mostValuable}
-          onChange={handleChange}
-        />
-      </div>
-
-      <div>
-        <p className="font-semibold">
-          5. What can we improve for future events?
-        </p>
-        <textarea
-          name="suggestions"
-          rows={3}
-          required
-          className="w-full border p-2 rounded"
-          value={form.suggestions}
-          onChange={handleChange}
-        />
-      </div>
-
-      <button
-        type="submit"
-        className={`w-full mt-6 py-3 px-4 rounded-[10px] text-white font-semibold transition duration-300 ${
-          isSubmitting
-            ? "bg-[#0060DC] cursor-not-allowed"
-            : "bg-[linear-gradient(to_right,_#0060DC,_#00E071)] hover:opacity-90 cursor-pointer"
-        }`}
-        disabled={isSubmitting}
+    <div className="py-12 px-4">
+      <form
+        onSubmit={handleSubmit}
+        className="max-w-2xl h-auto mx-auto p-12 bg-white shadow rounded space-y-6 text-gray-800"
       >
-        {isSubmitting ? "Submitting..." : "Submit Survey"}
-      </button>
-    </form>
+        <div className="w-fit h-auto">
+          <h1 className="text-[30px] font-bold">Survey</h1>
+          <div
+            className="w-24 h-1 rounded"
+            style={{
+              background: "linear-gradient(to right, blue, green, yellow, red)",
+            }}
+          ></div>
+        </div>
+        <p className="text-[14px] mb-8 italic">
+          Please enter the <strong>same email</strong> you used during
+          registration. This will be used to validate your participation and
+          generate your certificate.
+        </p>
+
+        <label className="block">
+          Your Email:
+          <input
+            name="email"
+            type="email"
+            required
+            className="w-full border p-2 mt-1 rounded"
+            value={form.email}
+            onChange={handleChange}
+          />
+        </label>
+
+        <div>
+          <p className="font-semibold">1. Which part(s) did you attend?</p>
+          {["SATF Main Forum", "B2B Connect"].map((label) => (
+            <label key={label} className="block cursor-pointer">
+              <input
+                type="checkbox"
+                value={label}
+                checked={form.partsAttended.includes(label)}
+                onChange={(e) => handleCheckbox(e, "partsAttended")}
+              />{" "}
+              {label}
+            </label>
+          ))}
+        </div>
+
+        <div>
+          <p className="font-semibold">
+            2. How would you rate your overall experience?
+          </p>
+          {["Excellent", "Good", "Average", "Poor"].map((option) => (
+            <label key={option} className="block cursor-pointer">
+              <input
+                type="radio"
+                name="experience"
+                value={option}
+                checked={form.experience === option}
+                onChange={handleChange}
+                required
+              />{" "}
+              {option}
+            </label>
+          ))}
+          <textarea
+            name="standout"
+            placeholder="Optional: What stood out to you the most?"
+            className="w-full border p-2 mt-2 rounded"
+            value={form.standout}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div>
+          <p className="font-semibold">3. Which track(s) did you attend?</p>
+          {["Layers – July 17, 2025", "Swine – July 24, 2025"].map((label) => (
+            <label key={label} className="block cursor-pointer">
+              <input
+                type="checkbox"
+                value={label}
+                checked={form.tracksAttended.includes(label)}
+                onChange={(e) => handleCheckbox(e, "tracksAttended")}
+              />{" "}
+              {label}
+            </label>
+          ))}
+        </div>
+
+        <div>
+          <p className="font-semibold">
+            4. Was the information or engagement relevant?
+          </p>
+          {["Yes", "Somewhat", "No"].map((option) => (
+            <label key={option} className="block cursor-pointer">
+              <input
+                type="radio"
+                name="relevance"
+                value={option}
+                checked={form.relevance === option}
+                onChange={handleChange}
+                required
+              />{" "}
+              {option}
+            </label>
+          ))}
+          <textarea
+            name="mostValuable"
+            placeholder="Optional: What topic or company did you find most valuable?"
+            className="w-full border p-2 mt-2 rounded"
+            value={form.mostValuable}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div>
+          <p className="font-semibold">
+            5. What can we improve for future events?
+          </p>
+          <textarea
+            name="suggestions"
+            rows={3}
+            required
+            className="w-full border p-2 rounded"
+            value={form.suggestions}
+            onChange={handleChange}
+          />
+        </div>
+
+        <button
+          type="submit"
+          className={`w-full mt-6 py-3 px-4 rounded-[10px] text-white font-semibold transition duration-300 ${
+            isSubmitting
+              ? "bg-[#0060DC] cursor-not-allowed"
+              : "bg-[linear-gradient(to_right,_#0060DC,_#00E071)] hover:opacity-90 cursor-pointer"
+          }`}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Submitting..." : "Submit Survey"}
+        </button>
+      </form>
+    </div>
   );
 };
 
