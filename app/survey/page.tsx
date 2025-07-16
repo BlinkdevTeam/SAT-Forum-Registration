@@ -51,6 +51,18 @@ const SurveyPage = () => {
     if (isSubmitting) return;
     setIsSubmitting(true);
 
+    if (form.partsAttended.length === 0) {
+      toast.error("Please select at least one part you attended.");
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (form.tracksAttended.length === 0) {
+      toast.error("Please select at least one track you attended.");
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
       // ✅ First, check if already submitted
       const { data: existingEntry, error: checkError } = await supabase
@@ -169,14 +181,21 @@ const SurveyPage = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-2xl h-auto mx-auto p-6 bg-white shadow rounded space-y-6 my-20 text-black"
+      className="max-w-2xl h-auto mx-auto p-12 bg-white shadow rounded space-y-6 my-20 text-gray-800"
     >
-      <h1 className="text-2xl font-semibold text-center">
-        SATF 2025 Post-Event Survey
-      </h1>
-      <p>
-        Thank you for joining the Species Advancement Tech Forum (SATF) and/or
-        B2B Connect!
+      <div className="w-fit h-auto">
+        <h1 className="text-[30px] font-bold">Survey</h1>
+        <div
+          className="w-24 h-1 rounded"
+          style={{
+            background: "linear-gradient(to right, blue, green, yellow, red)",
+          }}
+        ></div>
+      </div>
+      <p className="text-[14px] mb-8 italic">
+        Please enter the <strong>same email</strong> you used during
+        registration. This will be used to validate your participation and
+        generate your certificate.
       </p>
 
       <label className="block">
@@ -194,7 +213,7 @@ const SurveyPage = () => {
       <div>
         <p className="font-semibold">1. Which part(s) did you attend?</p>
         {["SATF Main Forum", "B2B Connect"].map((label) => (
-          <label key={label} className="block">
+          <label key={label} className="block cursor-pointer">
             <input
               type="checkbox"
               value={label}
@@ -211,7 +230,7 @@ const SurveyPage = () => {
           2. How would you rate your overall experience?
         </p>
         {["Excellent", "Good", "Average", "Poor"].map((option) => (
-          <label key={option} className="block">
+          <label key={option} className="block cursor-pointer">
             <input
               type="radio"
               name="experience"
@@ -235,7 +254,7 @@ const SurveyPage = () => {
       <div>
         <p className="font-semibold">3. Which track(s) did you attend?</p>
         {["Layers – July 17, 2025", "Swine – July 24, 2025"].map((label) => (
-          <label key={label} className="block">
+          <label key={label} className="block cursor-pointer">
             <input
               type="checkbox"
               value={label}
@@ -252,7 +271,7 @@ const SurveyPage = () => {
           4. Was the information or engagement relevant?
         </p>
         {["Yes", "Somewhat", "No"].map((option) => (
-          <label key={option} className="block">
+          <label key={option} className="block cursor-pointer">
             <input
               type="radio"
               name="relevance"
@@ -289,7 +308,11 @@ const SurveyPage = () => {
 
       <button
         type="submit"
-        className="bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700 disabled:opacity-50"
+        className={`w-full mt-6 py-3 px-4 rounded-[10px] text-white font-semibold transition duration-300 ${
+          isSubmitting
+            ? "bg-[#0060DC] cursor-not-allowed"
+            : "bg-[linear-gradient(to_right,_#0060DC,_#00E071)] hover:opacity-90 cursor-pointer"
+        }`}
         disabled={isSubmitting}
       >
         {isSubmitting ? "Submitting..." : "Submit Survey"}
