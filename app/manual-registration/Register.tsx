@@ -24,12 +24,12 @@ export default function PersonalInfoForm() {
     setFormData((prev) => ({
       ...prev,
       participation_type: "onsite",
-      selectedEvents: ["event1"],
+      selectedEvents: ["event2"],
     }));
   }, []);
 
   const [formData, setFormData] = useState({
-    selectedEvents: ["event1"],
+    selectedEvents: ["event2"],
     email: "",
     firstName: "",
     lastName: "",
@@ -168,7 +168,7 @@ export default function PersonalInfoForm() {
 
     try {
       const { data: existingList, error: fetchError } = await supabase
-        .from("satf_participant_onsite_17")
+        .from("satf_participant_onsite_24")
         .select("id")
         .eq("email", formData.email);
 
@@ -188,7 +188,7 @@ export default function PersonalInfoForm() {
       }
 
       const { data, error } = await supabase
-        .from("satf_participant_onsite_17")
+        .from("satf_participant_onsite_24")
         .insert([
           {
             email: formData.email,
@@ -203,7 +203,7 @@ export default function PersonalInfoForm() {
             company: formData.company_organization,
             designation: formData.designation_jobtitle,
             participation: "onsite",
-            selected_events: ["event1"],
+            selected_events: ["event2"],
             manual_reg: "yes",
             approved: true, // ✅ automatically set to true
           },
@@ -217,7 +217,7 @@ export default function PersonalInfoForm() {
         await handleSendEmail(formData.email);
 
         setFormData({
-          selectedEvents: ["event1"],
+          selectedEvents: ["event2"],
           email: "",
           firstName: "",
           lastName: "",
