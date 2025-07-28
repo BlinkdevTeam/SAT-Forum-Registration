@@ -84,22 +84,38 @@ const SurveyPage = () => {
       // ✅ Fetch participant name
       let fullName = "";
 
-      const { data: online } = await supabase
-        .from("satf_participant_online_17")
-        .select("first_name_upper, last_name_upper")
-        .eq("email", form.email)
-        .single();
+      // Check all participant tables for name lookup
+      const [online17, onsite17, online24, onsite24] = await Promise.all([
+        supabase
+          .from("satf_participant_online_17")
+          .select("first_name_upper, last_name_upper")
+          .eq("email", form.email)
+          .maybeSingle(),
 
-      const { data: onsite } = await supabase
-        .from("satf_participant_onsite_17")
-        .select("first_name_upper, last_name_upper")
-        .eq("email", form.email)
-        .single();
+        supabase
+          .from("satf_participant_onsite_17")
+          .select("first_name_upper, last_name_upper")
+          .eq("email", form.email)
+          .maybeSingle(),
 
-      if (online) {
-        fullName = `${online.first_name_upper} ${online.last_name_upper}`;
-      } else if (onsite) {
-        fullName = `${onsite.first_name_upper} ${onsite.last_name_upper}`;
+        supabase
+          .from("satf_participant_online_24")
+          .select("first_name_upper, last_name_upper")
+          .eq("email", form.email)
+          .maybeSingle(),
+
+        supabase
+          .from("satf_participant_onsite_24")
+          .select("first_name_upper, last_name_upper")
+          .eq("email", form.email)
+          .maybeSingle(),
+      ]);
+
+      const match =
+        online17.data ?? onsite17.data ?? online24.data ?? onsite24.data;
+
+      if (match) {
+        fullName = `${match.first_name_upper} ${match.last_name_upper}`;
       } else {
         toast.error("Participant name not found.");
         setIsSubmitting(false);
@@ -156,7 +172,7 @@ const SurveyPage = () => {
 
       // ✅ Send confirmation email
       await emailjs.send(
-        "service_1qkyi2i",
+        "service_02hek52",
         "template_hnce2jl",
         { email: form.email },
         "sOTpCYbD5KllwgbCD"
