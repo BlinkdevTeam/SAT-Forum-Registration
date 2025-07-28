@@ -6,7 +6,7 @@ import emailjs from "emailjs-com";
 import toast from "react-hot-toast";
 
 import { pdf } from "@react-pdf/renderer";
-import { MyPDFDocument } from "../components/MyPDFDocument"; // adjust path if needed
+import { MyPDFDocument } from "../components/MyPDFDocument-D2"; // adjust path if needed
 
 const SurveyPage = () => {
   const [form, setForm] = useState({
@@ -85,19 +85,7 @@ const SurveyPage = () => {
       let fullName = "";
 
       // Check all participant tables for name lookup
-      const [online17, onsite17, online24, onsite24] = await Promise.all([
-        supabase
-          .from("satf_participant_online_17")
-          .select("first_name_upper, last_name_upper")
-          .eq("email", form.email)
-          .maybeSingle(),
-
-        supabase
-          .from("satf_participant_onsite_17")
-          .select("first_name_upper, last_name_upper")
-          .eq("email", form.email)
-          .maybeSingle(),
-
+      const [online24, onsite24] = await Promise.all([
         supabase
           .from("satf_participant_online_24")
           .select("first_name_upper, last_name_upper")
@@ -111,8 +99,7 @@ const SurveyPage = () => {
           .maybeSingle(),
       ]);
 
-      const match =
-        online17.data ?? onsite17.data ?? online24.data ?? onsite24.data;
+      const match = online24.data ?? onsite24.data;
 
       if (match) {
         fullName = `${match.first_name_upper} ${match.last_name_upper}`;
@@ -209,6 +196,9 @@ const SurveyPage = () => {
             }}
           ></div>
         </div>
+        <p className="text-[14px] mb-4">
+          <strong>July 24, 2025</strong>
+        </p>
         <p className="text-[14px] mb-8 italic">
           Please enter the <strong>same email</strong> you used during
           registration. This will be used to validate your participation and
