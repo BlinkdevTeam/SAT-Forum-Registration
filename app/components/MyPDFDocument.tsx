@@ -31,7 +31,7 @@ export const MyPDFDocument = ({ name }: { name: string }) => (
     <Page size="A4" style={styles.page}>
       <View style={styles.container}>
         <Image src={backgroundImage} style={styles.backgroundImage} />
-        <Text style={styles.overlayText}>{name}</Text>
+        <Text style={styles.overlayText}>{name.toUpperCase()}</Text>
       </View>
     </Page>
   </Document>
