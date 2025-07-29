@@ -6,7 +6,7 @@ import emailjs from "emailjs-com";
 import toast from "react-hot-toast";
 
 import { pdf } from "@react-pdf/renderer";
-import { MyPDFDocument } from "../components/MyPDFDocument-D2"; // adjust path if needed
+import { MyPDFDocument } from "../components/MyPDFDocument-D2";
 
 const SurveyPage = () => {
   const [form, setForm] = useState({
@@ -14,19 +14,19 @@ const SurveyPage = () => {
     partsAttended: [] as string[],
     experience: "",
     standout: "",
-    tracksAttended: [] as string[],
     relevance: "",
     mostValuable: "",
     suggestions: "",
+    rolesAttended: "", // ✅ changed from string[] to string
+    otherRole: "",
   });
 
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Handle checkbox group (multi-select fields)
   const handleCheckbox = (
     e: React.ChangeEvent<HTMLInputElement>,
-    field: "partsAttended" | "tracksAttended"
+    field: "partsAttended"
   ) => {
     const { value, checked } = e.target;
     setForm((prev) => {
@@ -37,7 +37,6 @@ const SurveyPage = () => {
     });
   };
 
-  // Handle all text inputs and radios
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -45,7 +44,6 @@ const SurveyPage = () => {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Submit form
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isSubmitting) return;
@@ -57,34 +55,26 @@ const SurveyPage = () => {
       return;
     }
 
-    if (form.tracksAttended.length === 0) {
-      toast.error("Please select at least one track you attended.");
+    if (form.rolesAttended.length === 0) {
+      toast.error("Please select your role at the event.");
       setIsSubmitting(false);
       return;
     }
 
     try {
-      // ✅ First, check if already submitted
       const { data: existingEntry, error: checkError } = await supabase
         .from("satf_2025_survey")
         .select("email")
         .eq("email", form.email)
         .maybeSingle();
 
-      if (checkError) {
-        throw new Error("Failed to check existing survey submission.");
-      }
-
+      if (checkError) throw new Error("Failed to check existing submission.");
       if (existingEntry) {
         toast.error("You have already submitted this survey.");
         setIsSubmitting(false);
         return;
       }
 
-      // ✅ Fetch participant name
-      let fullName = "";
-
-      // Check all participant tables for name lookup
       const [online24, onsite24] = await Promise.all([
         supabase
           .from("satf_participant_online_24")
@@ -100,20 +90,17 @@ const SurveyPage = () => {
       ]);
 
       const match = online24.data ?? onsite24.data;
-
-      if (match) {
-        fullName = `${match.first_name_upper} ${match.last_name_upper}`;
-      } else {
+      if (!match) {
         toast.error("Participant name not found.");
         setIsSubmitting(false);
         return;
       }
 
+      const fullName = `${match.first_name_upper} ${match.last_name_upper}`;
       toast.loading(
         "Generating your certificate PDF... ⏳\nPlease keep the page open."
       );
 
-      // ✅ Generate and download PDF
       const generatedBlob = await pdf(
         <MyPDFDocument name={fullName} />
       ).toBlob();
@@ -127,7 +114,6 @@ const SurveyPage = () => {
       document.body.removeChild(link);
       URL.revokeObjectURL(blobURL);
 
-      // ✅ Then insert the survey result
       const formattedTime = new Date().toLocaleString("en-US", {
         timeZone: "Asia/Manila",
         year: "numeric",
@@ -145,19 +131,17 @@ const SurveyPage = () => {
           p_parts_attended: form.partsAttended,
           p_experience: form.experience,
           p_standout: form.standout,
-          p_tracks_attended: form.tracksAttended,
           p_relevance: form.relevance,
           p_most_valuable: form.mostValuable,
           p_suggestions: form.suggestions,
+          p_role_attended: form.rolesAttended,
+          p_other_role: form.otherRole,
           p_formatted_time_submitted: formattedTime,
         }
       );
 
-      if (insertError) {
-        throw insertError;
-      }
+      if (insertError) throw insertError;
 
-      // ✅ Send confirmation email
       await emailjs.send(
         "service_02hek52",
         "template_hnce2jl",
@@ -169,6 +153,7 @@ const SurveyPage = () => {
     } catch (err) {
       console.error("Submission error:", err);
       toast.error("Something went wrong. Please try again.");
+    } finally {
       setIsSubmitting(false);
     }
   };
@@ -259,16 +244,40 @@ const SurveyPage = () => {
         </div>
 
         <div>
-          <p className="font-semibold">3. Which track(s) did you attend?</p>
-          {["Layers – July 17, 2025", "Swine – July 24, 2025"].map((label) => (
+          <p className="font-semibold">3. What was your role at the event?</p>
+          {[
+            "Farmer / Producer",
+            "Veterinarian / Technical Professional",
+            "Distributor / Supplier",
+            "Company Representative",
+            "Student",
+            "Other",
+          ].map((label) => (
             <label key={label} className="block cursor-pointer">
               <input
-                type="checkbox"
+                type="radio"
+                name="rolesAttended"
                 value={label}
-                checked={form.tracksAttended.includes(label)}
-                onChange={(e) => handleCheckbox(e, "tracksAttended")}
+                checked={form.rolesAttended === label}
+                onChange={(e) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    rolesAttended: e.target.value,
+                  }))
+                }
               />{" "}
               {label}
+              {label === "Other" && form.rolesAttended === "Other" && (
+                <input
+                  type="text"
+                  className="ml-2 border-b border-gray-400 outline-none"
+                  placeholder="Please specify"
+                  value={form.otherRole}
+                  onChange={(e) =>
+                    setForm((prev) => ({ ...prev, otherRole: e.target.value }))
+                  }
+                />
+              )}
             </label>
           ))}
         </div>

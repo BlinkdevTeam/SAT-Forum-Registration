@@ -20,18 +20,32 @@ const styles = StyleSheet.create({
     left: 0,
     width: "100%",
     textAlign: "center",
-    fontSize: 36,
+    // fontSize: 36,
     color: "#000000",
     fontWeight: "bold",
   },
 });
+// Dynamic font size function
+const getFontSize = (name: string) => {
+  if (name.length <= 10) return 30;
+  if (name.length <= 20) return 28;
+  if (name.length <= 25) return 26;
+  return 24;
+};
 
 export const MyPDFDocument = ({ name }: { name: string }) => (
   <Document>
     <Page size="A4" style={styles.page}>
       <View style={styles.container}>
         <Image src={backgroundImage} style={styles.backgroundImage} />
-        <Text style={styles.overlayText}>{name.toUpperCase()}</Text>
+        <Text
+          style={{
+            ...styles.overlayText,
+            fontSize: getFontSize(name),
+          }}
+        >
+          {name.toUpperCase()}
+        </Text>
       </View>
     </Page>
   </Document>
